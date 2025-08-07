@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const TaskForgeLanding = () => {
+const Landing = () => {
   const [activeFeature, setActiveFeature] = useState(0);
   const [isVisible, setIsVisible] = useState({});
   const navigate = useNavigate();
@@ -133,9 +133,6 @@ const TaskForgeLanding = () => {
             <h1 className="text-6xl md:text-8xl font-black mb-6 tracking-tight overflow-hidden">
               <span 
                 className="block bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent transform transition-all duration-1000 ease-out"
-                style={{
-                  animation: 'slideUp 1s ease-out forwards, glow 2s ease-in-out infinite alternate'
-                }}
               >
                 TaskForge
               </span>
@@ -165,14 +162,10 @@ const TaskForgeLanding = () => {
             style={{ animation: 'fadeInUp 1s ease-out 1.2s forwards' }}
           >
             <button  onClick={() => navigate("/login?demo=true")} 
-            className="group relative bg-[#FF1E00] hover:bg-[#e51a00] px-8 py-4 rounded-full font-bold text-white text-lg transition-all duration-300 transform hover:scale-110 hover:rotate-1 hover:shadow-2xl hover:shadow-[#FF1E00]/50 active:scale-95">
+             className="border-2 border-[#333333] hover:border-[#FF1E00] hover:bg-[#FF1E00]/10 px-8 py-4 rounded-full font-semibold text-white transition-all duration-300 hover:scale-105 hover:-rotate-1 hover:shadow-lg">
               <span className="relative z-10">Try Demo</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-[#FF1E00] to-[#ff4500] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse"></div>
-              <div className="absolute -inset-1 bg-gradient-to-r from-[#FF1E00] to-[#ff4500] rounded-full opacity-20 group-hover:opacity-40 blur transition-all duration-300"></div>
-            </button>
-            <button className="border-2 border-[#333333] hover:border-[#FF1E00] hover:bg-[#FF1E00]/10 px-8 py-4 rounded-full font-semibold text-white transition-all duration-300 hover:scale-105 hover:-rotate-1 hover:shadow-lg">
-              Watch Demo
-            </button>
+               </button>
+            
           </div>
 
           {/* Animated Stats */}
@@ -183,7 +176,7 @@ const TaskForgeLanding = () => {
             {['100%', '0ms', '5min', '∞'].map((stat, index) => (
               <div key={index} className="text-center group hover:scale-110 transition-transform duration-300">
                 <div 
-                  className="text-3xl font-bold text-[#FF1E00] mb-2"
+                  className="text-3xl font-bold  mb-2"
                   style={{ 
                     animation: `countUp 2s ease-out ${1.8 + index * 0.2}s forwards, pulse 2s ease-in-out infinite ${2 + index * 0.3}s` 
                   }}
@@ -264,14 +257,8 @@ const TaskForgeLanding = () => {
                   <div 
                     className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500 rounded-xl`}
                   />
+                 
                   
-                  {/* Animated icon */}
-                  <div 
-                    className="text-4xl transform transition-all duration-300 group-hover:scale-125 group-hover:rotate-12"
-                    style={{ animation: activeFeature === index ? 'bounce 1s ease-in-out infinite' : 'none' }}
-                  >
-                    {feature.icon}
-                  </div>
                   
                   <div className="flex-1 relative z-10">
                     <h3 className="text-2xl font-bold mb-3 group-hover:text-[#FF1E00] transition-all duration-300 transform group-hover:translate-x-2">
@@ -280,9 +267,7 @@ const TaskForgeLanding = () => {
                     <p className="text-gray-300 mb-4 leading-relaxed transform group-hover:translate-x-1 transition-transform duration-300">
                       {feature.description}
                     </p>
-                    <div className="inline-block px-3 py-1 bg-[#333333] rounded-full text-sm text-[#FF1E00] font-semibold transform transition-all duration-300 group-hover:scale-110 group-hover:bg-[#FF1E00] group-hover:text-white">
-                      {feature.stats}
-                    </div>
+                    
                   </div>
                 </div>
               </div>
@@ -319,7 +304,7 @@ const TaskForgeLanding = () => {
           >
             Why <span className="text-[#FF1E00] relative">
               TaskForge
-              <span className="absolute -inset-1 bg-[#FF1E00] opacity-20 blur-lg animate-pulse"></span>
+              <span className="absolute -inset-1  "></span>
             </span>?
           </h2>
           
@@ -334,9 +319,9 @@ const TaskForgeLanding = () => {
 
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             {[
-              { icon: '🚀', title: 'Lightning Fast', desc: 'Real-time everything, no reloads, no waiting around' },
-              { icon: '🎯', title: 'Purpose Built', desc: 'Role-based power without the headache or complexity' },
-              { icon: '🔗', title: 'All-in-One', desc: 'Comments, file sharing, and collaboration built right in' }
+              {  title: 'Lightning Fast', desc: 'Real-time everything, no reloads, no waiting around' },
+              {  title: 'Purpose Built', desc: 'Role-based power without the headache or complexity' },
+              {  title: 'All-in-One', desc: 'Comments, file sharing, and collaboration built right in' }
             ].map((item, index) => (
               <div 
                 key={index}
@@ -392,59 +377,7 @@ const TaskForgeLanding = () => {
         `}</style>
       </section>
 
-      {/* Animated Social Proof */}
-      <section className="py-24 px-6" id="testimonials" data-animate>
-        <div className="max-w-6xl mx-auto">
-          <h2 
-            className={`text-4xl font-bold text-center mb-16 transition-all duration-1000 ${
-              isVisible.testimonials ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-            }`}
-          >
-            Loved by teams <span className="text-[#FF1E00]">everywhere</span>
-          </h2>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div 
-                key={index}
-                className={`p-6 rounded-xl bg-[#222222] border border-[#333333] hover:border-[#FF1E00] transition-all duration-500 hover:scale-105 hover:-rotate-1 transform cursor-pointer ${
-                  isVisible.testimonials ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-                }`}
-                style={{ 
-                  transitionDelay: `${index * 200}ms`,
-                  animation: isVisible.testimonials ? `slideInBounce 0.8s ease-out ${index * 0.2}s forwards` : 'none'
-                }}
-              >
-                <p className="text-gray-300 mb-4 italic hover:text-white transition-colors duration-300">
-                  "{testimonial.text}"
-                </p>
-                <div className="flex items-center gap-3">
-                  <div 
-                    className="w-10 h-10 bg-[#FF1E00] rounded-full flex items-center justify-center font-bold transform transition-all duration-300 hover:scale-125 hover:rotate-12"
-                    style={{ animation: 'pulse 2s ease-in-out infinite' }}
-                  >
-                    {testimonial.name.charAt(0)}
-                  </div>
-                  <div>
-                    <div className="font-semibold hover:text-[#FF1E00] transition-colors duration-300">
-                      {testimonial.name}
-                    </div>
-                    <div className="text-sm text-gray-400">{testimonial.role}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <style jsx>{`
-          @keyframes slideInBounce {
-            0% { opacity: 0; transform: translateY(50px) scale(0.8); }
-            60% { opacity: 1; transform: translateY(-10px) scale(1.05); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
-          }
-        `}</style>
-      </section>
+      
 
       {/* About Developer with Parallax Effect */}
       <section className="py-24 px-6 bg-[#111111] relative overflow-hidden" id="about" data-animate>
@@ -512,61 +445,37 @@ const TaskForgeLanding = () => {
       </section>
 
       {/* Final CTA with Spectacular Animation */}
-      <section className="py-24 px-6 text-center relative overflow-hidden" id="final-cta" data-animate>
+      <section className="py-24 px-6 text-center relative overflow-hidden" id="final-cta" >
         {/* Animated background elements */}
         <div className="absolute inset-0">
           {[...Array(5)].map((_, i) => (
             <div
-              key={i}
               className="absolute bg-[#FF1E00] rounded-full opacity-10"
-              style={{
-                width: `${50 + i * 20}px`,
-                height: `${50 + i * 20}px`,
-                left: `${20 + i * 15}%`,
-                top: `${10 + i * 20}%`,
-                animation: `float ${4 + i}s ease-in-out infinite ${i * 0.5}s`
-              }}
             />
           ))}
         </div>
 
         <div className="max-w-4xl mx-auto relative z-10">
           <h2 
-            className={`text-5xl font-bold mb-6 transition-all duration-1000 ${
-              isVisible['final-cta'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-            }`}
-            style={{ animation: isVisible['final-cta'] ? 'textGlow 2s ease-in-out infinite alternate' : 'none' }}
+            className={`text-5xl font-bold mb-6 transition-all duration-1000 `}
           >
             Ready to transform your team?
           </h2>
           
           <p 
-            className={`text-xl text-gray-300 mb-12 transition-all duration-1000 delay-300 ${
-              isVisible['final-cta'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-            }`}
+            className={`text-xl text-gray-300 mb-12 transition-all duration-1000 delay-300 `}
           >
             Join thousands of teams who've already made the switch to effortless collaboration.
           </p>
           
           <button 
           onClick={() => navigate("/login?demo=true")}
-            className={`bg-[#FF1E00] hover:bg-[#e51a00] px-12 py-5 rounded-full font-bold text-white text-xl transition-all duration-300 transform hover:scale-110 hover:shadow-2xl hover:shadow-[#FF1E00]/50 active:scale-95 relative overflow-hidden ${
-              isVisible['final-cta'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-            }`}
-            style={{ 
-              transitionDelay: '600ms',
-              animation: isVisible['final-cta'] ? 'megaPulse 3s ease-in-out infinite' : 'none'
-            }}
-          >
+          className="border-2 border-[#333333] hover:border-[#FF1E00] hover:bg-[#FF1E00]/10 px-8 py-4 rounded-full font-semibold text-white transition-all duration-300 hover:scale-105 hover:-rotate-1 hover:shadow-lg">
             <span className="relative z-10">Try Demo - It's Free</span>
-            <div className="absolute inset-0 bg-gradient-to-r from-[#FF1E00] via-[#ff4500] to-[#FF1E00] opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
-            <div className="absolute -inset-2 bg-[#FF1E00] rounded-full opacity-20 animate-ping"></div>
           </button>
           
           <p 
-            className={`text-sm text-gray-400 mt-4 transition-all duration-1000 delay-800 ${
-              isVisible['final-cta'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-            }`}
+            className={`text-sm text-gray-400 mt-4 transition-all duration-1000 delay-800 `}
           >
             No credit card required • Set up in 5 minutes
           </p>
@@ -687,4 +596,4 @@ const TaskForgeLanding = () => {
   );
 };
 
-export default TaskForgeLanding;
+export default Landing;
