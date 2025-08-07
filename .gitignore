@@ -30,6 +30,8 @@ yarn-error.log*
 # Cache & config
 /frontend/.eslintcache
 /frontend/.DS_Store
+/frontend/DIRECTORY_SUMMARY.md
+/frontend/PROJECT_SUMMARY.md
 
 
 # ========== BACKEND (Node + Express) ==========
@@ -43,7 +45,7 @@ yarn-error.log*
 /backend/build/
 # Cache & system
 /backend/.DS_Store
-
+TASKFORGE_BACKEND_DOCUMENTATION.md
 
 # ========== IDE & Editor Configs ==========
 
