@@ -1,36 +1,64 @@
-  import React, { useState, useEffect } from "react";
-  import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-  import ClipLoader from "react-spinners/ClipLoader";
-  import Login from "./pages/Login";
-  import Signin from "./pages/Signin";
-  import Welcome from "./pages/Welcome";
-  //import KanbanBoard from "./pages/KanbanBoard";
-  import TaskList from "./pages/TaskList";
-  import TaskForm from "./pages/TaskForm";
-  import TaskCart from "./pages/TaskCart";         // ✅ Added TaskCart
- // ✅ Import Tailwind CSS
-  
+import React, { useState, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
+import ClipLoader from "react-spinners/ClipLoader";
+import Login from "./pages/Login";
+import Signin from "./pages/Signin";
+import Welcome from "./pages/Welcome";
+import TaskList from "./pages/TaskList";
+import TaskForm from "./pages/TaskForm";
+import TaskCart from "./pages/TaskCart";
 import ProjectList from "./pages/ProjectList";
 import ProjectDetails from "./pages/ProjectDetails";
 import ProjectForm from "./pages/ProjectForm";
 import CreateTeamForm from "./pages/CreateTeamForm";
-import TeamList from "./pages/TeamList"; 
-import SelectTeam from "./pages/SelectTeam"; 
-import TeamDetails from "./pages/TeamDetails"; 
-import Landing from "./pages/Lending";// adjust path if it's in /pages
+import TeamList from "./pages/TeamList";
+import SelectTeam from "./pages/SelectTeam";
+import TeamDetails from "./pages/TeamDetails";
+import Landing from "./pages/Lending";
 
+// Import your navbar components
+import LandingNavbar from "./components/LendingNavbar";
+import WebsiteNavbar from "./components/websiteNavbar";
 
-  // Check if user is authenticated
-  const isAuthenticated = () => {
-    return !!localStorage.getItem("token");
-  };
+// Check if user is authenticated
+const isAuthenticated = () => {
+  return !!localStorage.getItem("token");
+};
 
-  // Protected Route Component
-  const PrivateRoute = ({ children }) => {
-    return isAuthenticated() ? children : <Navigate to="/login" />;
-  };
+// Protected Route Component
+const PrivateRoute = ({ children }) => {
+  return isAuthenticated() ? children : <Navigate to="/login" />;
+};
 
-  function App() {
+// Navbar Controller Component
+const NavbarController = () => {
+  const location = useLocation();
+
+  // Define which routes should show the landing navbar
+  const landingRoutes = ["/", "/login", "/register"];
+
+  // Check if current route is a landing page
+  const isLandingPage = landingRoutes.includes(location.pathname);
+
+  // Don't show navbar on login/register pages if you prefer
+  const hideNavbarRoutes = ["/login", "/register"];
+  const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname);
+
+  if (shouldHideNavbar) {
+    return null; // No navbar on login/register pages
+  }
+
+  // Return appropriate navbar based on route
+  return isLandingPage ? <LandingNavbar /> : <WebsiteNavbar />;
+};
+
+function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -59,34 +87,130 @@ import Landing from "./pages/Lending";// adjust path if it's in /pages
 
   return (
     <Router>
-      {/* The magic wrapper: full screen flexbox centering container */}
-      <div>
-        <Routes>
-          {/* Your routes here */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<Landing />} />
+      <div className="min-h-screen bg-gray-50">
+        {/* Navbar Controller - automatically shows correct navbar */}
+        <NavbarController />
 
-          <Route path="/register" element={<Signin />} />
-          <Route path="/welcome" element={<PrivateRoute><Welcome /></PrivateRoute>} />
-
-          <Route path="/tasks" element={<PrivateRoute><TaskList /></PrivateRoute>} />
-          <Route path="/task/new" element={<PrivateRoute><TaskForm /></PrivateRoute>} />
-          <Route path="/task/edit/:id" element={<PrivateRoute><TaskForm isEdit={true} /></PrivateRoute>} />
-          <Route path="/task/:id" element={<PrivateRoute><TaskCart /></PrivateRoute>} />
-          <Route path="/projects" element={<PrivateRoute><ProjectList/></PrivateRoute>}/>
-          <Route path="/projects/:id" element={<PrivateRoute><ProjectDetails /></PrivateRoute>} />
-          <Route path="/project/new" element={<PrivateRoute><ProjectForm /></PrivateRoute>} />
-          <Route path="/teams" element={<PrivateRoute><TeamList /></PrivateRoute>} />
-          <Route path="/team/new" element={<PrivateRoute><CreateTeamForm /></PrivateRoute>} />
-          <Route path="/select-team" element={<PrivateRoute><SelectTeam /></PrivateRoute>} />
-<Route path="/teams/:teamId" element={<PrivateRoute><TeamDetails /></PrivateRoute>} />
-
+        {/* Main Content */}
+        <div className="flex-1">
           
-        </Routes>
+          <Routes>
+            {/* Landing page */}
+            <Route path="/" element={<Landing />} />
+
+            {/* Auth routes */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Signin />} />
+
+            {/* Protected app routes */}
+            <Route
+              path="/welcome"
+              element={
+                <PrivateRoute>
+                  <Welcome />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/tasks"
+              element={
+                <PrivateRoute>
+                  <TaskList />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/task/new"
+              element={
+                <PrivateRoute>
+                  <TaskForm />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/task/edit/:id"
+              element={
+                <PrivateRoute>
+                  <TaskForm isEdit={true} />
+                </PrivateRoute>
+              }
+            />
+
+            {/* OLD ROUTE - Remove this */}
+            {/* <Route path="/task/:id" element={<PrivateRoute><TaskCart /></PrivateRoute>} /> */}
+
+            <Route
+              path="/projects"
+              element={
+                <PrivateRoute>
+                  <ProjectList />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/projects/:id"
+              element={
+                <PrivateRoute>
+                  <ProjectDetails />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/project/new"
+              element={
+                <PrivateRoute>
+                  <ProjectForm />
+                </PrivateRoute>
+              }
+            />
+
+            {/* NEW NESTED TASK ROUTE */}
+            <Route
+              path="/:projectId/:taskId"
+              element={
+                <PrivateRoute>
+                  <TaskCart />
+                </PrivateRoute>
+              }
+            />
+
+            <Route
+              path="/teams"
+              element={
+                <PrivateRoute>
+                  <TeamList />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/team/new"
+              element={
+                <PrivateRoute>
+                  <CreateTeamForm />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/select-team"
+              element={
+                <PrivateRoute>
+                  <SelectTeam />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/teams/:teamId"
+              element={
+                <PrivateRoute>
+                  <TeamDetails />
+                </PrivateRoute>
+              }
+            />
+          </Routes>
+        </div>
       </div>
     </Router>
   );
+}
 
-  }
-
-  export default App;
+export default App;

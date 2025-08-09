@@ -14,7 +14,7 @@ router.post("/", authMiddleware, verifyRole("team_lead","admin"), createProject)
 router.get("/", authMiddleware, verifyRole("team_lead", "team_member","team_member"), getProject);
 router.get("/:id",
   authMiddleware,
-  verifyRole("team_lead", "admin"),
+  verifyRole("team_lead", "admin","team_member"),
   verifyTeamAccess, 
   getProjectById
 );

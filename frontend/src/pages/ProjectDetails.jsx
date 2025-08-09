@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import API from "../api";
 import Breadcrumb from "../components/Breadcrumb";
 
+
 const ProjectDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -15,6 +16,8 @@ const ProjectDetails = () => {
   const fetchProjectDetails = async () => {
     try {
       const response = await API.get(`/projects/${id}`);
+      console.log("Project Details API Response:", response.data); // Add this line
+      
       if (response.data.success && response.data.project) {
         setProject(response.data.project);
         setTasks(response.data.project.tasks || []);
@@ -41,6 +44,7 @@ const ProjectDetails = () => {
   return (
     <div className="min-h-screen bg-[#191818] text-white px-12 py-16">
       <div className="max-w-[1440px] mx-auto">
+          
         <Breadcrumb />
       <div className="max-w-[1440px] mx-auto ">
         <h2 className="text-[40px] font-bold">{project.name}</h2>
@@ -102,23 +106,23 @@ const ProjectDetails = () => {
                     </span>
                   </div>
                   <button
-                    onClick={() => navigate(`/task/${task._id}`)}
-                    className="w-8 h-8 rounded-full bg-white hover:bg-gray-200 flex items-center justify-center transition"
-                  >
-                    <svg
-                      className="w-4 h-4 text-[#FF1E00]"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M7 17L17 7M7 7h10v10"
-                      />
-                    </svg>
-                  </button>
+  onClick={() => navigate(`/${id}/${task._id}`)} // Changed from `/task/${task._id}`
+  className="w-8 h-8 rounded-full bg-white hover:bg-gray-200 flex items-center justify-center transition"
+>
+  <svg
+    className="w-4 h-4 text-[#FF1E00]"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    viewBox="0 0 24 24"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M7 17L17 7M7 7h10v10"
+    />
+  </svg>
+</button>
                 </div>
               </div>
             ))}
