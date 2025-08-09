@@ -51,7 +51,18 @@ const Landing = () => {
     { name: "Mike R.", role: "Developer", text: "Finally, a tool that doesn't get in the way. Clean, fast, and actually useful." },
     { name: "Lisa M.", role: "Team Lead", text: "The role-based access is perfect. Everyone knows their responsibilities." }
   ];
-
+  const comingSoonTasks = [
+    { text: "Finalize project concept, database design, and system architecture", completed: true },
+    { text: "Develop backend server with Express.js, including authentication and role-based access control", completed: true },
+    { text: "Create and integrate CRUD APIs for teams, projects, and tasks with assignment and tracking features", completed: true },
+    { text: "Design and implement responsive frontend UI using React and TailwindCSS, integrated with backend APIs", completed: true },
+    { text: "Develop core dashboard with project/task overviews and basic team management", completed: true },
+    { text: "Implement advanced collaboration features (email invitations, file sharing, in-app notifications)", completed: false },
+    { text: "Optimize performance, enhance security, and deploy production build to cloud hosting", completed: false },
+    { text: "Officially launch the application for public use", completed: false }
+  ];
+  
+  
   // Floating particles animation
   const FloatingParticles = () => (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -287,6 +298,179 @@ const Landing = () => {
           }
         `}</style>
       </section>
+      <section className="py-24 px-6 bg-[#0f0f0f] relative overflow-hidden" id="coming-soon" data-animate>
+        {/* Background pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div 
+            className="absolute inset-0"
+            style={{
+              backgroundImage: 'radial-gradient(circle at 25% 25%, #FF1E00 2px, transparent 2px), radial-gradient(circle at 75% 75%, #FF1E00 1px, transparent 1px)',
+              backgroundSize: '50px 50px',
+              animation: 'patternMove 15s linear infinite'
+            }}
+          />
+        </div>
+
+        <div className="max-w-4xl mx-auto relative z-10">
+          <div 
+            className={`text-center mb-12 transition-all duration-1000 ${
+              isVisible['coming-soon'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+            }`}
+          >
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <div 
+                className="text-4xl"
+                style={{ animation: 'bounce 2s ease-in-out infinite' }}
+              >
+                🚀
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+                Coming Soon
+              </h2>
+            </div>
+            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+              We're working hard behind the scenes. Here's what's in our development pipeline.
+            </p>
+          </div>
+
+          {/* Notion-style Todo List */}
+          <div 
+            className={`bg-[#191818] border border-[#333333] rounded-xl p-8 shadow-2xl transition-all duration-1000 ${
+              isVisible['coming-soon'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+            }`}
+            style={{ transitionDelay: '300ms' }}
+          >
+            <div className="space-y-3">
+              {comingSoonTasks.map((task, index) => (
+                <div
+                  key={index}
+                  className={`flex items-center gap-4 p-3 rounded-lg transition-all duration-500 hover:bg-[#222222] group ${
+                    isVisible['coming-soon'] ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
+                  }`}
+                  style={{ 
+                    transitionDelay: `${500 + index * 100}ms`,
+                    animation: isVisible['coming-soon'] ? `slideInLeft 0.6s ease-out ${0.5 + index * 0.1}s forwards` : 'none'
+                  }}
+                >
+                  {/* Checkbox */}
+                  <div className="flex-shrink-0">
+                    <div 
+                      className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all duration-300 ${
+                        task.completed 
+                          ? 'bg-[#FF1E00] border-[#FF1E00] text-white' 
+                          : 'border-gray-500 hover:border-gray-400'
+                      }`}
+                    >
+                      {task.completed && (
+                        <svg 
+                          className="w-3 h-3" 
+                          fill="currentColor" 
+                          viewBox="0 0 20 20"
+                          style={{ animation: 'checkmark 0.5s ease-out' }}
+                        >
+                          <path 
+                            fillRule="evenodd" 
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" 
+                            clipRule="evenodd" 
+                          />
+                        </svg>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Task text */}
+                  <div className="flex-1">
+                    <span 
+                      className={`text-sm transition-all duration-300 ${
+                        task.completed 
+                          ? 'text-gray-500 line-through' 
+                          : 'text-gray-300 group-hover:text-white'
+                      }`}
+                    >
+                      {task.text}
+                    </span>
+                  </div>
+
+                  {/* Status indicator */}
+                  <div className="flex-shrink-0">
+                    {task.completed ? (
+                      <span className="text-xs bg-green-900/30 text-green-400 px-2 py-1 rounded-full border border-green-700">
+                        Done
+                      </span>
+                    ) : (
+                      <span className="text-xs bg-[#FF1E00]/20 text-[#FF1E00] px-2 py-1 rounded-full border border-[#FF1E00]/30">
+                        In Progress
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Progress bar */}
+            <div 
+              className={`mt-8 pt-6 border-t border-[#333333] transition-all duration-1000 ${
+                isVisible['coming-soon'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'
+              }`}
+              style={{ transitionDelay: '1200ms' }}
+            >
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-sm text-gray-400">Development Progress</span>
+                <span className="text-sm text-[#FF1E00] font-semibold">
+                  {Math.round((comingSoonTasks.filter(task => task.completed).length / comingSoonTasks.length) * 100)}%
+                </span>
+              </div>
+              <div className="w-full bg-[#333333] rounded-full h-2 overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-[#FF1E00] to-[#ff4500] rounded-full transition-all duration-1000 ease-out"
+                  style={{ 
+                    width: `${(comingSoonTasks.filter(task => task.completed).length / comingSoonTasks.length) * 100}%`,
+                    animation: isVisible['coming-soon'] ? 'progressFill 2s ease-out 1.5s forwards' : 'none'
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Call to action */}
+          <div 
+            className={`text-center mt-8 transition-all duration-1000 ${
+              isVisible['coming-soon'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+            }`}
+            style={{ transitionDelay: '1500ms' }}
+          >
+            <p className="text-gray-400 mb-4">
+              Want to be notified when these features launch?
+            </p>
+            <button 
+              onClick={() => navigate("/login?demo=true")}
+              className="bg-[#FF1E00] hover:bg-[#e51a00] px-6 py-3 rounded-full font-semibold text-white transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-[#FF1E00]/50"
+            >
+              Try Current Version
+            </button>
+          </div>
+        </div>
+
+        <style jsx>{`
+          @keyframes patternMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+          }
+          @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+          }
+          @keyframes checkmark {
+            0% { transform: scale(0) rotate(45deg); }
+            50% { transform: scale(1.2) rotate(45deg); }
+            100% { transform: scale(1) rotate(45deg); }
+          }
+          @keyframes progressFill {
+            from { width: 0%; }
+          }
+        `}</style>
+      </section>
+
 
       {/* Why TaskForge Section */}
       <section className="py-24 px-6 bg-[#111111] relative overflow-hidden" id="why" data-animate>

@@ -90,7 +90,7 @@ const TeamDetails = () => {
   if (!team) return <p className="text-center text-red-500">Team not found.</p>;
 
   return (
-    <div className="min-h-screen bg-[#191818] text-white px-12 py-16">
+    <div className="min-h-screen bg-[#191818] text-white px-12 py-4">
       <div className="max-w-[1440px] mx-auto">
         <Breadcrumb/>
         <h2

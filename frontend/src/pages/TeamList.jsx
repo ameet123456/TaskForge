@@ -49,7 +49,7 @@ const TeamList = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#191818] text-white py-16 ">
+    <div className="min-h-screen bg-[#191818] text-white py-4 ">
       <div className="max-w-[1440px] mx-auto">
         <div className="max-w-4xl mx-auto">
           <Breadcrumb />

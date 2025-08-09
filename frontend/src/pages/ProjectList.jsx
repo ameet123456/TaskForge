@@ -77,7 +77,7 @@ const ProjectList = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#191818] text-white px-12 py-16">
+    <div className="min-h-screen bg-[#191818] text-white px-12 py-4">
       <div className="max-w-[1440px] mx-auto">
         <div className="mb-8 flex flex-col sm:flex-col sm:items-left sm:justify-left">
           <h1 className="text-[32px] font-bold">

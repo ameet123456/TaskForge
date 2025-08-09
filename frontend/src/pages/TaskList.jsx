@@ -143,7 +143,7 @@ const TaskList = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#191818] text-white px-12 py-16">
+    <div className="min-h-screen bg-[#191818] text-white px-12 py-4">
       <div className="max-w-[1440px] mx-auto">
         {/* Greeting */}
         <div className="mb-8">

@@ -85,7 +85,7 @@ const TaskCart = () => {
   if (!task) return <div className="text-gray-400 text-center p-10">Task not found</div>;
 
   return (
-    <div className="bg-[#191818] min-h-screen text-white px-6 py-12">
+    <div className="bg-[#191818] min-h-screen text-white px-6 py-4">
       <div className="max-w-6xl mx-auto space-y-6">
         <div>
           <Breadcrumb />
