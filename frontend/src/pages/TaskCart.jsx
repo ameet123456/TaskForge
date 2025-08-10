@@ -58,21 +58,13 @@ const TaskCart = () => {
 
     setAddingComment(true);
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5000/api/tasks/${taskId}`, { // Changed from task._id to taskId
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          comments: commentText,
-        }),
+      const response = await API.put(`/tasks/${taskId}`, {
+        comments: commentText,
       });
-
-      const data = await response.json();
-      setTask(data.data);
+      
+      setTask(response.data.data);
       setCommentText("");
+      
     } catch (error) {
       alert(`Failed to add comment: ${error.message}`);
     } finally {
