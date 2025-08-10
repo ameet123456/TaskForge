@@ -164,7 +164,7 @@ const SelectTeam = () => {
 
                     {/* Action button */}
                     <button
-                      onClick={() => navigate(`/teams/${team._id}`)}
+                      
                       className="w-8 h-8 rounded-full bg-white hover:bg-gray-200 flex items-center justify-center transition"
                     >
                       <svg

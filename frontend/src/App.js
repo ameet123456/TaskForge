@@ -25,6 +25,8 @@ import Landing from "./pages/Lending";
 // Import your navbar components
 import LandingNavbar from "./components/LendingNavbar";
 import WebsiteNavbar from "./components/websiteNavbar";
+import Profile from "./pages/Profile";
+import Setting from "./pages/Setting";
 
 // Check if user is authenticated
 const isAuthenticated = () => {
@@ -93,7 +95,6 @@ function App() {
 
         {/* Main Content */}
         <div className="flex-1">
-          
           <Routes>
             {/* Landing page */}
             <Route path="/" element={<Landing />} />
@@ -103,109 +104,27 @@ function App() {
             <Route path="/register" element={<Signin />} />
 
             {/* Protected app routes */}
-            <Route
-              path="/welcome"
-              element={
-                <PrivateRoute>
-                  <Welcome />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/tasks"
-              element={
-                <PrivateRoute>
-                  <TaskList />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/task/new"
-              element={
-                <PrivateRoute>
-                  <TaskForm />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/task/edit/:id"
-              element={
-                <PrivateRoute>
-                  <TaskForm isEdit={true} />
-                </PrivateRoute>
-              }
-            />
+            <Route path="/welcome" element={<PrivateRoute><Welcome /></PrivateRoute>} />
+            <Route path="/tasks" element={<PrivateRoute><TaskList /></PrivateRoute>} />
+            <Route path="/task/new" element={<PrivateRoute><TaskForm /></PrivateRoute>} />
+            <Route path="/task/edit/:id" element={<PrivateRoute><TaskForm isEdit={true} /></PrivateRoute>} />
 
             {/* OLD ROUTE - Remove this */}
             {/* <Route path="/task/:id" element={<PrivateRoute><TaskCart /></PrivateRoute>} /> */}
 
-            <Route
-              path="/projects"
-              element={
-                <PrivateRoute>
-                  <ProjectList />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/projects/:id"
-              element={
-                <PrivateRoute>
-                  <ProjectDetails />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/project/new"
-              element={
-                <PrivateRoute>
-                  <ProjectForm />
-                </PrivateRoute>
-              }
-            />
+            <Route path="/projects" element={<PrivateRoute><ProjectList /></PrivateRoute>} />
+            <Route path="/projects/:id" element={<PrivateRoute><ProjectDetails /></PrivateRoute>} />
+            <Route path="/project/new" element={<PrivateRoute><ProjectForm /></PrivateRoute>} />
 
             {/* NEW NESTED TASK ROUTE */}
-            <Route
-              path="/:projectId/:taskId"
-              element={
-                <PrivateRoute>
-                  <TaskCart />
-                </PrivateRoute>
-              }
-            />
+            <Route path="/:projectId/:taskId" element={<PrivateRoute><TaskCart /></PrivateRoute>} />
 
-            <Route
-              path="/teams"
-              element={
-                <PrivateRoute>
-                  <TeamList />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/team/new"
-              element={
-                <PrivateRoute>
-                  <CreateTeamForm />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/select-team"
-              element={
-                <PrivateRoute>
-                  <SelectTeam />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/teams/:teamId"
-              element={
-                <PrivateRoute>
-                  <TeamDetails />
-                </PrivateRoute>
-              }
-            />
+            <Route path="/teams" element={<PrivateRoute><TeamList /></PrivateRoute>} />
+            <Route path="/team/new" element={<PrivateRoute><CreateTeamForm /></PrivateRoute>} />
+            <Route path="/select-team" element={<PrivateRoute><SelectTeam /></PrivateRoute>} />
+            <Route path="/teams/:teamId" element={<PrivateRoute><TeamDetails /></PrivateRoute>} />
+            <Route path="/user/profile" element={<PrivateRoute><Profile/></PrivateRoute>}/>
+            <Route path="/setting" element={<PrivateRoute><Setting/></PrivateRoute>}/>
           </Routes>
         </div>
       </div>

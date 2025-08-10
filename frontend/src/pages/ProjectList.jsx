@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../api";
+import Breadcrumb from "../components/Breadcrumb";
 
 const ProjectList = () => {
   const [projects, setProjects] = useState([]);
@@ -8,30 +9,15 @@ const ProjectList = () => {
   const [error, setError] = useState("");
   const [currentTime, setCurrentTime] = useState(new Date());
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
-  const userName = user?.name || "User";  
+
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(new Date());
-    }, 60000);
+    }, 60000);  
 
     return () => clearInterval(interval);
   }, []);
-  const getGreeting = () => {
-    const hour = currentTime.getHours();
-    if (hour < 12) return "Good morning";
-    else if (hour < 17) return "Good afternoon";
-    else return "Good evening";
-  };
-
-  const formattedDate = currentTime.toLocaleString("en-US", {
-    weekday: "long",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  });
 
   const fetchProjects = async () => {
     try {
@@ -77,17 +63,11 @@ const ProjectList = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#191818] text-white px-12 py-4">
+    <div className="min-h-screen bg-[#191818] text-white px-12 py-8">
       <div className="max-w-[1440px] mx-auto">
-        <div className="mb-8 flex flex-col sm:flex-col sm:items-left sm:justify-left">
-          <h1 className="text-[32px] font-bold">
-            {getGreeting()},{" "}
-            <span className="text-[#FF1E00] font-bold">{userName}</span>
-          </h1>
-          <p className="text-white/80 text-sm mt-2 sm:mt-0 flex items-center gap-2">
-            {formattedDate}
-          </p>
-        </div>
+        
+<Breadcrumb/>
+        
         {projects.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-lg text-gray-400">No projects found.</p>

@@ -118,21 +118,13 @@ const WebsiteNavbar = () => {
         {/* Left Section - Logo and Project Info */}
         <div className="flex items-center space-x-6">
           {/* Logo/Brand */}
-          {/*<div 
+          <div
             className="text-white font-bold text-xl cursor-pointer hover:text-red-500 transition-colors"
-            onClick={() => navigate('/welcome')}
+            onClick={() => navigate("/welcome")}
           >
             TaskFlow
           </div>
-          */}
-          {shouldShowProject && (
-            <div
-              c
-              className="text-white font-bold text-xl cursor-pointer hover:text-red-500 transition-colors"
-            >
-              {loading ? "Loading..." : project?.name || "Project not found"}
-            </div>
-          )}
+
           {/* Navigation Links */}
           <div className="hidden md:flex items-center space-x-4">
             <button
@@ -161,7 +153,21 @@ const WebsiteNavbar = () => {
           </div>
         </div>
 
-        
+        {/* Center Section - Project Name */}
+        {shouldShowProject && (
+          <div className="hidden lg:flex items-center justify-center flex-1">
+            <div className="bg-[#2d2d2d] px-4 py-2 rounded-lg border border-gray-600">
+              <div className="flex items-center space-x-2">
+                <FolderOpen className="w-4 h-4 text-red-500" />
+                <span className="text-white font-medium">
+                  {loading
+                    ? "Loading..."
+                    : project?.name || "Project not found"}
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Right Section - User Info */}
         <div className="flex items-center space-x-4">
@@ -210,7 +216,12 @@ const WebsiteNavbar = () => {
                       <User className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <p className="text-white font-medium">{user?.name}</p>
+                      <p
+                        className="text-white font-medium cursor-pointer"
+                        onClick={() => navigate("/user/profile")}
+                      >
+                        {user?.name}
+                      </p>
                       <p className="text-gray-400 text-sm">{user?.email}</p>
                       {primaryTeam && (
                         <p className="text-gray-500 text-xs mt-1">
@@ -226,7 +237,7 @@ const WebsiteNavbar = () => {
                   <button
                     onClick={() => {
                       setUserMenuOpen(false);
-                      // Add settings navigation here
+                      navigate("/setting");
                     }}
                     className="w-full flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-gray-600 px-3 py-2 rounded-lg transition-colors"
                   >
