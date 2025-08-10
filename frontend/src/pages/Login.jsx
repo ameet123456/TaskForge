@@ -100,7 +100,7 @@ const Login = () => {
   };
 
   const handleGoogleLogin = () => {
-    window.open("http://localhost:5000/user/auth/google", "_self");
+    window.open("http://localhost:5000/api/users/auth/google", "_self");
   };
 
   // Handle Google OAuth callback

@@ -32,7 +32,7 @@ yarn-error.log*
 /frontend/.DS_Store
 /frontend/DIRECTORY_SUMMARY.md
 /frontend/PROJECT_SUMMARY.md
-
+/frontend/src/pages/Signin.jsx
 
 
 # ========== BACKEND (Node + Express) ==========
