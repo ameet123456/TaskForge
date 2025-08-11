@@ -3,8 +3,7 @@ import TeamMember from "../models/team_member_model.js";
 
 const verifyTeamAccess = async (req, res, next) => {
   try {
-    const projectId = req.params.projectId || req.params.id || req.body.projectId;
-
+    const projectId = req.params.id || req.body.projectId;
 
     if (!projectId) {
       return res.status(400).json({ success: false, message: "Project ID is required" });

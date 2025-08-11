@@ -41,18 +41,11 @@ const SettingsPage = () => {
 
   const [settings, setSettings] = useState({
     // General Settings
-    theme: "dark",
     language: "en",
     timezone: "UTC",
     dateFormat: "MM/DD/YYYY",
     
-    // Notification Settings
-    emailNotifications: true,
-    pushNotifications: true,
-    taskReminders: true,
-    projectUpdates: true,
-    teamInvites: true,
-    weeklyDigest: false,
+
     
     // Privacy Settings
     profileVisibility: "team",
@@ -215,7 +208,6 @@ const SettingsPage = () => {
 
   const tabs = [
     { id: "general", label: "General", icon: Settings },
-    { id: "notifications", label: "Notifications", icon: Bell },
     { id: "privacy", label: "Privacy", icon: Shield },
     { id: "security", label: "Security", icon: Lock },
     { id: "data", label: "Data & Storage", icon: Database }
@@ -326,39 +318,7 @@ const SettingsPage = () => {
 
                     <div className="space-y-6">
                       {/* Theme */}
-                      <div className="flex items-center justify-between p-4 bg-[#191818] rounded-lg">
-                        <div>
-                          <h3 className="font-medium mb-1">Theme</h3>
-                          <p className="text-sm text-white/60">Choose your preferred theme</p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => handleSettingChange("general", "theme", "light")}
-                            className={`p-2 rounded-lg transition-colors ${
-                              settings.theme === "light" ? "bg-[#FF1E00] text-white" : "bg-gray-600 text-gray-300"
-                            }`}
-                          >
-                            <Sun className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => handleSettingChange("general", "theme", "dark")}
-                            className={`p-2 rounded-lg transition-colors ${
-                              settings.theme === "dark" ? "bg-[#FF1E00] text-white" : "bg-gray-600 text-gray-300"
-                            }`}
-                          >
-                            <Moon className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => handleSettingChange("general", "theme", "system")}
-                            className={`p-2 rounded-lg transition-colors ${
-                              settings.theme === "system" ? "bg-[#FF1E00] text-white" : "bg-gray-600 text-gray-300"
-                            }`}
-                          >
-                            <Monitor className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </div>
-
+                      
                       {/* Language */}
                       <div className="flex items-center justify-between p-4 bg-[#191818] rounded-lg">
                         <div>
@@ -418,89 +378,7 @@ const SettingsPage = () => {
                 </div>
               )}
 
-              {/* Notifications */}
-              {activeTab === "notifications" && (
-                <div className="space-y-8">
-                  <div>
-                    <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
-                      <Bell className="w-6 h-6 text-[#FF1E00]" />
-                      Notification Settings
-                    </h2>
-
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between p-4 bg-[#191818] rounded-lg">
-                        <div className="flex items-center gap-3">
-                          <Mail className="w-5 h-5 text-[#FF1E00]" />
-                          <div>
-                            <h3 className="font-medium">Email Notifications</h3>
-                            <p className="text-sm text-white/60">Receive notifications via email</p>
-                          </div>
-                        </div>
-                        <ToggleSwitch
-                          enabled={settings.emailNotifications}
-                          onChange={(value) => handleSettingChange("notifications", "emailNotifications", value)}
-                        />
-                      </div>
-
-                      <div className="flex items-center justify-between p-4 bg-[#191818] rounded-lg">
-                        <div className="flex items-center gap-3">
-                          <MessageSquare className="w-5 h-5 text-[#FF1E00]" />
-                          <div>
-                            <h3 className="font-medium">Push Notifications</h3>
-                            <p className="text-sm text-white/60">Receive push notifications in browser</p>
-                          </div>
-                        </div>
-                        <ToggleSwitch
-                          enabled={settings.pushNotifications}
-                          onChange={(value) => handleSettingChange("notifications", "pushNotifications", value)}
-                        />
-                      </div>
-
-                      <div className="flex items-center justify-between p-4 bg-[#191818] rounded-lg">
-                        <div className="flex items-center gap-3">
-                          <Calendar className="w-5 h-5 text-[#FF1E00]" />
-                          <div>
-                            <h3 className="font-medium">Task Reminders</h3>
-                            <p className="text-sm text-white/60">Get reminded about upcoming task deadlines</p>
-                          </div>
-                        </div>
-                        <ToggleSwitch
-                          enabled={settings.taskReminders}
-                          onChange={(value) => handleSettingChange("notifications", "taskReminders", value)}
-                        />
-                      </div>
-
-                      <div className="flex items-center justify-between p-4 bg-[#191818] rounded-lg">
-                        <div className="flex items-center gap-3">
-                          <Settings className="w-5 h-5 text-[#FF1E00]" />
-                          <div>
-                            <h3 className="font-medium">Project Updates</h3>
-                            <p className="text-sm text-white/60">Notifications about project changes</p>
-                          </div>
-                        </div>
-                        <ToggleSwitch
-                          enabled={settings.projectUpdates}
-                          onChange={(value) => handleSettingChange("notifications", "projectUpdates", value)}
-                        />
-                      </div>
-
-                      <div className="flex items-center justify-between p-4 bg-[#191818] rounded-lg">
-                        <div className="flex items-center gap-3">
-                          <Bell className="w-5 h-5 text-[#FF1E00]" />
-                          <div>
-                            <h3 className="font-medium">Weekly Digest</h3>
-                            <p className="text-sm text-white/60">Weekly summary of your activity</p>
-                          </div>
-                        </div>
-                        <ToggleSwitch
-                          enabled={settings.weeklyDigest}
-                          onChange={(value) => handleSettingChange("notifications", "weeklyDigest", value)}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
+             
 
               {/* Privacy Settings */}
               {activeTab === "privacy" && (
@@ -524,7 +402,6 @@ const SettingsPage = () => {
                         >
                           <option value="public">Everyone</option>
                           <option value="team">Team Members Only</option>
-                          <option value="private">Only Me</option>
                         </select>
                       </div>
 
@@ -575,70 +452,7 @@ const SettingsPage = () => {
                     </h2>
 
                     <div className="space-y-6">
-                      {/* Change Password */}
-                      <div className="p-6 bg-[#191818] rounded-lg">
-                        <h3 className="font-medium mb-4">Change Password</h3>
-                        <div className="space-y-4">
-                          <div className="relative">
-                            <input
-                              type={showCurrentPassword ? "text" : "password"}
-                              name="currentPassword"
-                              value={passwordForm.currentPassword}
-                              onChange={handlePasswordChange}
-                              placeholder="Current Password"
-                              className="w-full bg-[#2d2d2d] border border-gray-600 text-white p-3 rounded-lg focus:border-[#FF1E00] focus:outline-none pr-10"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
-                            >
-                              {showCurrentPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                            </button>
-                          </div>
-                          <div className="relative">
-                            <input
-                              type={showNewPassword ? "text" : "password"}
-                              name="newPassword"
-                              value={passwordForm.newPassword}
-                              onChange={handlePasswordChange}
-                              placeholder="New Password"
-                              className="w-full bg-[#2d2d2d] border border-gray-600 text-white p-3 rounded-lg focus:border-[#FF1E00] focus:outline-none pr-10"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => setShowNewPassword(!showNewPassword)}
-                              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
-                            >
-                              {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                            </button>
-                          </div>
-                          <div className="relative">
-                            <input
-                              type={showConfirmPassword ? "text" : "password"}
-                              name="confirmPassword"
-                              value={passwordForm.confirmPassword}
-                              onChange={handlePasswordChange}
-                              placeholder="Confirm New Password"
-                              className="w-full bg-[#2d2d2d] border border-gray-600 text-white p-3 rounded-lg focus:border-[#FF1E00] focus:outline-none pr-10"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
-                            >
-                              {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                            </button>
-                          </div>
-                          <button
-                            onClick={changePassword}
-                            disabled={!passwordForm.currentPassword || !passwordForm.newPassword || !passwordForm.confirmPassword}
-                            className="bg-[#FF1E00] hover:bg-red-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg transition-colors"
-                          >
-                            Change Password
-                          </button>
-                        </div>
-                      </div>
+                      
 
                       {/* Security Options */}
                       <div className="flex items-center justify-between p-4 bg-[#191818] rounded-lg">
@@ -713,24 +527,8 @@ const SettingsPage = () => {
                         </button>
                       </div>
 
-                      {/* Storage Usage */}
-                      <div className="p-6 bg-[#191818] rounded-lg">
-                        <h3 className="font-medium mb-4">Storage Usage</h3>
-                        <div className="space-y-3">
-                          <div className="flex justify-between text-sm">
-                            <span>Files & Documents</span>
-                            <span>2.3 GB</span>
-                          </div>
-                          <div className="w-full bg-gray-600 rounded-full h-2">
-                            <div className="bg-[#FF1E00] h-2 rounded-full w-[23%]"></div>
-                          </div>
-                          <div className="flex justify-between text-xs text-white/60">
-                            <span>2.3 GB used</span>
-                            <span>10 GB available</span>
-                          </div>
-                        </div>
-                      </div>
 
+                     
                       {/* Danger Zone */}
                       <div className="p-6 bg-red-500/10 border border-red-500/20 rounded-lg">
                         <div className="flex items-center gap-3 mb-4">

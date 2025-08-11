@@ -12,23 +12,7 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Floating particles animation
-  const FloatingParticles = () => (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {[...Array(15)].map((_, i) => (
-        <div
-          key={i}
-          className="absolute w-1 h-1 bg-[#FF1E00] rounded-full opacity-20"
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            animation: `float ${3 + Math.random() * 4}s ease-in-out infinite`,
-            animationDelay: `${Math.random() * 2}s`
-          }}
-        />
-      ))}
-    </div>
-  );
+
 
   // Animated background grid
   const AnimatedGrid = () => (
@@ -169,14 +153,8 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-[#191818] text-white flex items-center justify-center px-6 relative overflow-hidden">
       <AnimatedGrid />
-      <FloatingParticles />
-      
-      {/* Background decorative elements */}
-      <div className="absolute top-20 left-20 w-40 h-40 bg-[#FF1E00] rounded-full opacity-5 animate-pulse"></div>
-      <div className="absolute bottom-20 right-20 w-60 h-60 bg-[#333333] rounded-full opacity-5 animate-pulse delay-1000"></div>
-      
       <div className="relative z-10 w-full max-w-md">
-        {/* Logo/Header */}
+
         <div className="text-center mb-8 animate-fadeInUp">
           <h1 className="text-4xl font-black mb-2 bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
             TaskForge
