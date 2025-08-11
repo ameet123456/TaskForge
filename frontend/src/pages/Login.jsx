@@ -134,7 +134,7 @@ const Login = () => {
     if (demoMode === "true") {
       console.log("DEMO MODE ACTIVATED");
       setIsDemo(true);
-      setEmail("admin@example.com");
+      setEmail("lead1@example.com");
       setPassword("123456");
 
       // Auto-trigger demo login after a short delay
