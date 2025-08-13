@@ -120,7 +120,7 @@ const WebsiteNavbar = () => {
           {/* Logo/Brand */}
           <div
             className="text-white font-bold text-xl cursor-pointer hover:text-red-500 transition-colors"
-            onClick={() => navigate("/welcome")}
+            onClick={() => navigate("/home")}
           >
             TaskFlow
           </div>
@@ -128,7 +128,7 @@ const WebsiteNavbar = () => {
           {/* Navigation Links */}
           <div className="hidden md:flex items-center space-x-4">
             <button
-              onClick={() => navigate("/welcome")}
+              onClick={() => navigate("/home")}
               className="flex items-center space-x-2 text-gray-300 hover:text-white px-3 py-2 rounded-lg hover:bg-gray-700 transition-colors"
             >
               <Home className="w-4 h-4" />

@@ -27,6 +27,7 @@ import LandingNavbar from "./components/LendingNavbar";
 import WebsiteNavbar from "./components/websiteNavbar";
 import Profile from "./pages/Profile";
 import Setting from "./pages/Setting";
+import HomePage from "./pages/HomePage";
 
 // Check if user is authenticated
 const isAuthenticated = () => {
@@ -118,7 +119,7 @@ function App() {
 
             {/* NEW NESTED TASK ROUTE */}
             <Route path="/:projectId/:taskId" element={<PrivateRoute><TaskCart /></PrivateRoute>} />
-
+            <Route path="/home" element={<PrivateRoute><HomePage/></PrivateRoute>}/>
             <Route path="/teams" element={<PrivateRoute><TeamList /></PrivateRoute>} />
             <Route path="/team/new" element={<PrivateRoute><CreateTeamForm /></PrivateRoute>} />
             <Route path="/select-team" element={<PrivateRoute><SelectTeam /></PrivateRoute>} />

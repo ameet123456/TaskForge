@@ -43,11 +43,7 @@ const SelectTeam = () => {
 
     // Small delay for animation effect
     setTimeout(() => {
-      if (team.role === "team_lead") {
-        navigate("/projects");
-      } else {
-        navigate("/tasks");
-      }
+      navigate("/home"); // Instead of projects/tasks directly
       setLoading(false);
     }, 1500);
   };

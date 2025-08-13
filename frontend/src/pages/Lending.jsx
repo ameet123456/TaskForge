@@ -325,7 +325,7 @@ const Landing = () => {
                 🚀
               </div>
               <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-                Coming Soon
+                To Do List 
               </h2>
             </div>
             <p className="text-lg text-gray-300 max-w-2xl mx-auto">
