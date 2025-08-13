@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import API from "../api"
 import { useNavigate, useLocation } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -12,9 +13,6 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-
-
-  // Animated background grid
   const AnimatedGrid = () => (
     <div className="absolute inset-0 opacity-3">
       <div 
@@ -87,7 +85,6 @@ const Login = () => {
     window.open("http://localhost:5000/api/users/auth/google", "_self");
   };
 
-  // Handle Google OAuth callback
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("token");
@@ -110,7 +107,6 @@ const Login = () => {
     }
   }, [navigate]);
 
-  // Handle demo mode
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const demoMode = params.get("demo");
@@ -121,7 +117,6 @@ const Login = () => {
       setEmail("lead1@example.com");
       setPassword("123456");
 
-      // Auto-trigger demo login after a short delay
       setTimeout(() => {
         document.getElementById("demo-login-btn")?.click();
       }, 800);
@@ -169,7 +164,6 @@ const Login = () => {
           )}
         </div>
 
-        {/* Login Form */}
         <div className="bg-[#2d2d2d] rounded-2xl p-8 border border-[#333333] hover:border-[#444444] transition-all duration-300 animate-slideInUp shadow-2xl">
           {error && (
             <div className="mb-6 p-4 bg-red-900/20 border border-red-500/30 rounded-lg text-red-400 text-sm animate-shake">
@@ -214,28 +208,22 @@ const Login = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors duration-200"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors duration-300"
                 >
                   {showPassword ? (
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
+                    <EyeOff className="w-5 h-5" />
                   ) : (
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" />
-                    </svg>
+                    <Eye className="w-5 h-5" />
                   )}
                 </button>
               </div>
             </div>
 
-            {/* Submit Button */}
             <button
               id="demo-login-btn"
               type="submit"
               disabled={loading}
-              className="w-full bg-[#FF1E00] hover:bg-[#e51a00] px-6 py-3 rounded-lg font-semibold text-white transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed animate-slideInUp delay-200 shadow-lg hover:shadow-xl hover:shadow-[#FF1E00]/25"
+              className="w-full bg-gradient-to-r from-[#FF1E00] to-[#FF6B35] hover:from-[#FF6B35] hover:to-[#FF1E00] text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 animate-slideInUp delay-200 shadow-lg hover:shadow-xl"
             >
               {loading ? (
                 <div className="flex items-center justify-center gap-2">
@@ -248,14 +236,12 @@ const Login = () => {
             </button>
           </form>
 
-          {/* Divider */}
           <div className="my-6 flex items-center animate-fadeInUp delay-300">
             <div className="flex-1 border-t border-[#444444]"></div>
             <span className="px-4 text-gray-500 text-sm">OR</span>
             <div className="flex-1 border-t border-[#444444]"></div>
           </div>
 
-          {/* Google Login Button */}
           <button
             onClick={handleGoogleLogin}
             disabled={loading}
@@ -270,7 +256,6 @@ const Login = () => {
             Sign in with Google
           </button>
 
-          {/* Back to home */}
           <div className="mt-6 text-center animate-fadeInUp delay-500">
             <button
               onClick={() => navigate("/")}
@@ -281,7 +266,6 @@ const Login = () => {
           </div>
         </div>
 
-        {/* Demo Info */}
         {isDemo && (
           <div className="mt-8 text-center animate-fadeInUp delay-600">
             <p className="text-gray-400 text-sm mb-4">Demo credentials auto-filled:</p>

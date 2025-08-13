@@ -96,7 +96,6 @@ const ProjectForm = () => {
 
           <div className="bg-[#2d2d2d] rounded-xl p-8">
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Project Name */}
               <div>
                 <label className="block text-white font-semibold mb-3 text-lg">
                   Project Name
@@ -112,7 +111,6 @@ const ProjectForm = () => {
                 />
               </div>
 
-              {/* Project Description */}
               <div>
                 <label className="block text-white font-semibold mb-3 text-lg">
                   Description
@@ -128,7 +126,6 @@ const ProjectForm = () => {
                 ></textarea>
               </div>
 
-              {/* End Date */}
               <div>
                 <label className="block text-white font-semibold mb-3 text-lg">
                   End Date
@@ -143,7 +140,6 @@ const ProjectForm = () => {
                 />
               </div>
 
-              {/* Team Selection */}
               {user?.isAdmin ? (
                 <div>
                   <label className="block text-white font-semibold mb-3 text-lg">
@@ -179,7 +175,6 @@ const ProjectForm = () => {
                 </div>
               )}
 
-              {/* Submit Button */}
               <div className="flex justify-center pt-6 space-x-4">
                 <button
                   type="button"

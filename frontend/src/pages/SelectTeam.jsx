@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-// Inside component
-
 const SelectTeam = () => {
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -14,7 +12,6 @@ const SelectTeam = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Option 1: If backend sends teams via API
     fetch("/api/teams", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -23,7 +20,6 @@ const SelectTeam = () => {
       .then((res) => res.json())
       .then((data) => setTeams(data))
       .catch(() => {
-        // Option 2: Fallback to localStorage
         const storedTeams = JSON.parse(
           localStorage.getItem("availableTeams") || "[]"
         );
@@ -31,19 +27,16 @@ const SelectTeam = () => {
       });
   }, []);
 
-
   const handleSelect = (team) => {
     setSelectedTeam(team);
     setLoading(true);
 
-    // Save to localStorage
     localStorage.setItem("teamId", team.teamId);
     localStorage.setItem("role", team.role);
     localStorage.setItem("teamName", team.teamName);
 
-    // Small delay for animation effect
     setTimeout(() => {
-      navigate("/home"); // Instead of projects/tasks directly
+      navigate("/home");
       setLoading(false);
     }, 1500);
   };
@@ -63,11 +56,9 @@ const SelectTeam = () => {
 
   return (
     <div className="min-h-screen bg-[#191818] text-white relative overflow-hidden">
-      {/* Background decorative elements */}
 
       <div className="relative z-10 min-h-screen flex items-center justify-center px-6 ">
         <div className="w-full max-w-4xl">
-          {/* Header */}
           <div className="text-center mb-12 animate-fadeInUp">
             <div className="flex items-center justify-center gap-3 mb-4">
               <h1 className="text-4xl font-black bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
@@ -83,7 +74,6 @@ const SelectTeam = () => {
             </p>
           </div>
 
-          {/* Teams Selection */}
           {teams.length === 0 ? (
             <div className="text-center py-16 animate-fadeInUp delay-300">
               <div className="bg-[#2d2d2d] rounded-2xl p-12 border border-[#333333] max-w-md mx-auto">
@@ -126,18 +116,14 @@ const SelectTeam = () => {
                 onClick={() => !loading && handleSelect(team)}
               >
               
-                  {/* Selection indicator */}
                   {selectedTeam?.teamId === team.teamId && (
                     <div className="absolute top-4 right-4 w-6 h-6 bg-[#FF1E00] rounded-full flex items-center justify-center animate-ping">
                       <div className="w-3 h-3 bg-[#FF1E00] rounded-full"></div>
                     </div>
                   )}
 
-                  {/* Team content */}
                   <div className="relative z-10">
-                    {/* Team header */}
                     <div className="flex flex-col gap-1 mb-4">
-                    {/* Team name */}
                       <h3 className="text-2xl font-bold mb-3  transition-colors duration-300">
                       {team.teamName}
                       </h3>
@@ -151,14 +137,13 @@ const SelectTeam = () => {
                         </span>
                       </div>
                     </div>
-                    <div className="flex items-center justify-between mt-auto space-x-2">                      {/* Team details */}
+                    <div className="flex items-center justify-between mt-auto space-x-2">
                       
                       <div className="flex items-center gap-2 text-sm text-gray-400">
                         Team ID: {team.teamId?.slice(0, 8)}...
                       </div>                      
                       
 
-                    {/* Action button */}
                     <button
                       
                       className="w-8 h-8 rounded-full bg-white hover:bg-gray-200 flex items-center justify-center transition"
@@ -180,15 +165,12 @@ const SelectTeam = () => {
                     </div>
                   </div>
 
-                  {/* Hover effect background */}
                   <div className="absolute inset-0 bg-gradient-to-br from-[#FF1E00]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none"></div>
                 </div>
               ))}
             </div>
           )}
 
-
-          {/* Loading overlay */}
           {loading && (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
               <div className="bg-[#2d2d2d] rounded-2xl p-8 border border-[#333333] text-center">

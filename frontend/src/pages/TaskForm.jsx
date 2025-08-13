@@ -167,7 +167,6 @@ const TaskForm = () => {
           </div>
         </div>
 
-        {/* Main Form Card */}
         <div className="max-w-4xl mx-auto">
           <div className="bg-[#2d2d2d] rounded-xl p-8">
             {error && (
@@ -178,10 +177,8 @@ const TaskForm = () => {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-8">
-              {/* Admin Section - Team & Project Selection */}
               {user?.isAdmin && (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-6 border-b border-gray-600">
-                  {/* Team Selection */}
                   <div className="space-y-3">
                     <label className="flex items-center gap-2 text-lg font-medium text-white">
                       <Building2 className="w-5 h-5  " />
@@ -210,7 +207,6 @@ const TaskForm = () => {
                     </div>
                   </div>
 
-                  {/* Project Selection */}
                   <div className="space-y-3">
                     <label className="flex items-center gap-2 text-lg font-medium text-white">
                       <CheckSquare className="w-5 h-5  " />
@@ -241,9 +237,7 @@ const TaskForm = () => {
                 </div>
               )}
 
-              {/* Task Details Section */}
               <div className="space-y-6">
-                {/* Task Title */}
                 <div className="space-y-3">
                   <label className="flex items-center gap-2 text-lg font-medium text-white">
                     <CheckSquare className="w-5 h-5  " />
@@ -260,7 +254,6 @@ const TaskForm = () => {
                   />
                 </div>
 
-                {/* Task Description */}
                 <div className="space-y-3">
                   <label className="flex items-center gap-2 text-lg font-medium text-white">
                     <FileText className="w-5 h-5  " />
@@ -277,9 +270,7 @@ const TaskForm = () => {
                   />
                 </div>
 
-                {/* Task Configuration Row */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {/* Due Date */}
                   <div className="space-y-3">
                     <label className="flex items-center gap-2 text-lg font-medium text-white">
                       <Calendar className="w-5 h-5  " />
@@ -295,7 +286,6 @@ const TaskForm = () => {
                     />
                   </div>
 
-                  {/* Priority */}
                   <div className="space-y-3">
                     <label className="flex items-center gap-2 text-lg font-medium text-white">
                       <Flag className="w-5 h-5  " />
@@ -322,7 +312,6 @@ const TaskForm = () => {
                     
                   </div>
 
-                  {/* Assign To */}
                   <div className="space-y-3">
                     <label className="flex items-center gap-2 text-lg font-medium text-white">
                       <User className="w-5 h-5  " />
@@ -361,7 +350,6 @@ const TaskForm = () => {
                 </div>
               </div>
 
-              {/* Action Buttons */}
               <div className="flex justify-between items-center pt-6 border-t border-gray-600">
                 <button
                   type="button"

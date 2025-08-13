@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import userRoutes from "./routes/user_route.js";
 import taskRoutes from "./routes/task_route.js";
-import teamRoutes from "./routes/team_route.js";  
+import teamRoutes from "./routes/team_route.js";
 import teamMemberRoutes from "./routes/team_member_route.js";
 import projectRoutes from "./routes/project_route.js";
 
@@ -42,7 +42,6 @@ app.use("/api/teams", teamRoutes);
 app.use("/api/team-members", teamMemberRoutes);
 app.use("/api/projects", projectRoutes);
 
-    
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ success: false, message: "Something went wrong!" });

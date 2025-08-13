@@ -131,7 +131,6 @@ const TeamDetails = () => {
       <div className="max-w-[1440px] mx-auto">
         <Breadcrumb />
         
-        {/* Team Header */}
         <div className="mb-12">
           <div className="flex items-start justify-between mb-6">
             <div>
@@ -148,7 +147,6 @@ const TeamDetails = () => {
             </div>
           </div>
 
-          {/* Team Lead Card */}
           <div className="bg-[#2d2d2d] rounded-xl p-6 mb-8">
             <div className="flex items-center gap-4">
               
@@ -162,7 +160,6 @@ const TeamDetails = () => {
           </div>
         </div>
 
-        {/* Team Members Section */}
         <div className="mb-12">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold flex items-center gap-3">
@@ -171,7 +168,6 @@ const TeamDetails = () => {
             </h2>
           </div>
 
-          {/* Members Grid */}
           {team.members && team.members.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
               {team.members.map((member) => (
@@ -210,7 +206,6 @@ const TeamDetails = () => {
             </div>
           )}
 
-          {/* Add Member Section */}
           <div className="bg-[#2d2d2d] rounded-xl p-6">
             <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
               <Plus className="w-5 h-5 " />
@@ -259,7 +254,6 @@ const TeamDetails = () => {
           </div>
         </div>
 
-        {/* Projects Section */}
         {projects.length > 0 && (
           <div>
             <div className="flex items-center justify-between mb-6">

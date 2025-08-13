@@ -63,7 +63,6 @@ const Landing = () => {
   ];
   
   
-  // Floating particles animation
   const FloatingParticles = () => (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {[...Array(20)].map((_, i) => (
@@ -87,7 +86,6 @@ const Landing = () => {
     </div>
   );
 
-  // Animated background grid
   const AnimatedGrid = () => (
     <div className="absolute inset-0 opacity-5">
       <div 
@@ -107,7 +105,6 @@ const Landing = () => {
     </div>
   );
 
-  // Typewriter animation component
   const TypewriterText = ({ text, delay = 0 }) => {
     const [displayText, setDisplayText] = useState('');
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -133,13 +130,11 @@ const Landing = () => {
 
   return (
     <div className="bg-[#191818] text-white min-h-screen overflow-x-hidden">
-      {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center px-6 overflow-hidden">
         <AnimatedGrid />
         <FloatingParticles />
         
         <div className="relative z-10 max-w-6xl mx-auto text-center">
-          {/* Main Heading with staggered animation */}
           <div className="mb-8">
             <h1 className="text-6xl md:text-8xl font-black mb-6 tracking-tight overflow-hidden">
               <span 
@@ -166,7 +161,6 @@ const Landing = () => {
             </div>
           </div>
 
-          {/* Animated CTA Buttons */}
           <div 
             className="flex flex-col sm:flex-row gap-4 justify-center mb-12 opacity-0
             "
@@ -179,7 +173,6 @@ const Landing = () => {
             
           </div>
 
-          {/* Animated Stats */}
           <div 
             className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto opacity-0"
             style={{ animation: 'fadeInUp 1s ease-out 1.5s forwards' }}
@@ -225,7 +218,6 @@ const Landing = () => {
         `}</style>
       </section>
 
-      {/* Features Section */}
       <section className="py-24 px-6" id="features" data-animate>
         <div className="max-w-6xl mx-auto">
           <div 
@@ -242,7 +234,6 @@ const Landing = () => {
             </p>
           </div>
 
-          {/* Interactive Feature Cards with advanced animations */}
           <div className="grid md:grid-cols-2 gap-8">
             {features.map((feature, index) => (
               <div
@@ -264,7 +255,6 @@ const Landing = () => {
                 onMouseEnter={() => setActiveFeature(index)}
               >
                 <div className="flex items-start gap-6 relative overflow-hidden">
-                  {/* Background gradient animation */}
                   <div 
                     className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500 rounded-xl`}
                   />
@@ -299,7 +289,6 @@ const Landing = () => {
         `}</style>
       </section>
       <section className="py-24 px-6 bg-[#0f0f0f] relative overflow-hidden" id="coming-soon" data-animate>
-        {/* Background pattern */}
         <div className="absolute inset-0 opacity-5">
           <div 
             className="absolute inset-0"
@@ -333,7 +322,6 @@ const Landing = () => {
             </p>
           </div>
 
-          {/* Notion-style Todo List */}
           <div 
             className={`bg-[#191818] border border-[#333333] rounded-xl p-8 shadow-2xl transition-all duration-1000 ${
               isVisible['coming-soon'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
@@ -352,7 +340,6 @@ const Landing = () => {
                     animation: isVisible['coming-soon'] ? `slideInLeft 0.6s ease-out ${0.5 + index * 0.1}s forwards` : 'none'
                   }}
                 >
-                  {/* Checkbox */}
                   <div className="flex-shrink-0">
                     <div 
                       className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all duration-300 ${
@@ -378,7 +365,6 @@ const Landing = () => {
                     </div>
                   </div>
 
-                  {/* Task text */}
                   <div className="flex-1">
                     <span 
                       className={`text-sm transition-all duration-300 ${
@@ -391,7 +377,6 @@ const Landing = () => {
                     </span>
                   </div>
 
-                  {/* Status indicator */}
                   <div className="flex-shrink-0">
                     {task.completed ? (
                       <span className="text-xs bg-green-900/30 text-green-400 px-2 py-1 rounded-full border border-green-700">
@@ -407,7 +392,6 @@ const Landing = () => {
               ))}
             </div>
 
-            {/* Progress bar */}
             <div 
               className={`mt-8 pt-6 border-t border-[#333333] transition-all duration-1000 ${
                 isVisible['coming-soon'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'
@@ -432,7 +416,6 @@ const Landing = () => {
             </div>
           </div>
 
-          {/* Call to action */}
           <div 
             className={`text-center mt-8 transition-all duration-1000 ${
               isVisible['coming-soon'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
@@ -472,9 +455,7 @@ const Landing = () => {
       </section>
 
 
-      {/* Why TaskForge Section */}
       <section className="py-24 px-6 bg-[#111111] relative overflow-hidden" id="why" data-animate>
-        {/* Animated background shapes */}
         <div className="absolute inset-0">
           <div className="absolute top-20 left-20 w-40 h-40 bg-[#FF1E00] rounded-full opacity-5 animate-pulse"></div>
           <div className="absolute bottom-20 right-20 w-60 h-60 bg-[#333333] rounded-full opacity-5" style={{ animation: 'float 6s ease-in-out infinite' }}></div>
@@ -563,7 +544,6 @@ const Landing = () => {
 
       
 
-      {/* About Developer with Parallax Effect */}
       <section className="py-24 px-6 bg-[#111111] relative overflow-hidden" id="about" data-animate>
         <div 
           className="absolute inset-0 opacity-10"
@@ -628,9 +608,7 @@ const Landing = () => {
         `}</style>
       </section>
 
-      {/* Final CTA with Spectacular Animation */}
       <section className="py-24 px-6 text-center relative overflow-hidden" id="final-cta" >
-        {/* Animated background elements */}
         <div className="absolute inset-0">
           {[...Array(5)].map((_, i) => (
             <div
@@ -677,9 +655,7 @@ const Landing = () => {
         `}</style>
       </section>
 
-      {/* Footer with Animated Elements */}
       <footer className="bg-[#0d0d0d] text-gray-500 py-8 px-6 relative overflow-hidden">
-        {/* Animated footer background */}
         <div className="absolute inset-0 opacity-5">
           <div 
             className="absolute inset-0"
@@ -731,7 +707,6 @@ const Landing = () => {
         `}</style>
       </footer>
 
-      {/* Global Styles */}
       <style jsx global>{`
         * {
           scroll-behavior: smooth;

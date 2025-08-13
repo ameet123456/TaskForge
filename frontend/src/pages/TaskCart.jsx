@@ -9,7 +9,6 @@ import Breadcrumb from "../components/Breadcrumb";
 dayjs.extend(relativeTime);
 
 const TaskCart = () => {
-  // Updated to get both projectId and taskId from URL
   const { projectId, taskId } = useParams();
   const navigate = useNavigate();
   const [task, setTask] = useState(null);
@@ -18,7 +17,6 @@ const TaskCart = () => {
   const [commentText, setCommentText] = useState("");
   const [addingComment, setAddingComment] = useState(false);
 
-  // Inline editing states
   const [editingTitle, setEditingTitle] = useState(false);
   const [editingDescription, setEditingDescription] = useState(false);
   const [editingStatus, setEditingStatus] = useState(false);
@@ -32,7 +30,6 @@ const TaskCart = () => {
     const fetchTask = async () => {
       try {
         const token = localStorage.getItem("token");
-        // Use taskId instead of id
         const res = await API.get(`/tasks/${taskId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -190,7 +187,6 @@ const TaskCart = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-2 space-y-6">
             <div className="bg-[#2d2d2d] p-6 rounded-xl">
-              {/* Editable Title */}
               <div className="mb-4">
                 {editingTitle ? (
                   <input
@@ -213,7 +209,6 @@ const TaskCart = () => {
                 )}
               </div>
 
-              {/* Editable Description */}
               <div className="mb-4">
                 {editingDescription ? (
                   <textarea
@@ -280,7 +275,6 @@ const TaskCart = () => {
           <div className="bg-[#2d2d2d] p-6 rounded-xl space-y-4">
             <h2 className="text-lg font-bold text-white">Properties</h2>
             
-            {/* Editable Status */}
             <div className="flex items-center justify-between">
               <span className="text-gray-400">Status:</span>
               {editingStatus ? (

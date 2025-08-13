@@ -40,20 +40,15 @@ const SettingsPage = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [settings, setSettings] = useState({
-    // General Settings
     language: "en",
     timezone: "UTC",
     dateFormat: "MM/DD/YYYY",
     
-
-    
-    // Privacy Settings
     profileVisibility: "team",
     showEmail: false,
     showPhone: false,
     allowSearching: true,
     
-    // Security Settings
     twoFactorAuth: false,
     loginAlerts: true,
     sessionTimeout: 30,
@@ -73,10 +68,6 @@ const SettingsPage = () => {
     try {
       const userData = JSON.parse(localStorage.getItem("user"));
       setUser(userData);
-      
-      // In a real app, fetch settings from API
-      // const response = await API.get(`/users/${userData._id}/settings`);
-      // setSettings(response.data.settings);
       
     } catch (err) {
       console.error("Error fetching settings:", err);
@@ -107,10 +98,6 @@ const SettingsPage = () => {
     setSuccess("");
 
     try {
-      // Replace with your actual API endpoint
-      // await API.put(`/users/${user._id}/settings`, settings);
-      
-      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       setSuccess("Settings saved successfully!");
@@ -139,10 +126,6 @@ const SettingsPage = () => {
 
     setSaving(true);
     try {
-      // Replace with your actual API endpoint
-      // await API.post(`/users/${user._id}/change-password`, passwordForm);
-      
-      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       setPasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
@@ -159,7 +142,6 @@ const SettingsPage = () => {
 
   const exportData = async () => {
     try {
-      // Simulate data export
       const data = {
         user: user,
         settings: settings,
@@ -195,9 +177,6 @@ const SettingsPage = () => {
     }
 
     try {
-      // Replace with your actual API endpoint
-      // await API.delete(`/users/${user._id}`);
-      
       localStorage.removeItem("user");
       navigate("/login");
     } catch (err) {
@@ -243,7 +222,6 @@ const SettingsPage = () => {
   return (
     <div className="min-h-screen bg-[#191818] text-white px-12 py-8">
       <div className="max-w-[1440px] mx-auto">
-        {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-[40px] font-bold">Settings</h1>
@@ -263,7 +241,6 @@ const SettingsPage = () => {
           </button>
         </div>
 
-        {/* Success/Error Messages */}
         {success && (
           <div className="mb-6 p-4 bg-green-500/10 border border-green-500/20 rounded-lg flex items-center gap-3">
             <CheckCircle className="w-5 h-5 text-green-400" />
@@ -279,7 +256,6 @@ const SettingsPage = () => {
         )}
 
         <div className="flex gap-8">
-          {/* Sidebar */}
           <div className="w-64 flex-shrink-0">
             <div className="bg-[#2d2d2d] rounded-xl p-4 sticky top-8">
               <nav className="space-y-2">
@@ -304,10 +280,8 @@ const SettingsPage = () => {
             </div>
           </div>
 
-          {/* Main Content */}
           <div className="flex-1">
             <div className="bg-[#2d2d2d] rounded-xl p-8">
-              {/* General Settings */}
               {activeTab === "general" && (
                 <div className="space-y-8">
                   <div>
@@ -317,10 +291,7 @@ const SettingsPage = () => {
                     </h2>
 
                     <div className="space-y-6">
-                      {/* Theme */}
-                      
-                      {/* Language */}
-                      <div className="flex items-center justify-between p-4 bg-[#191818] rounded-lg">
+                                              <div className="flex items-center justify-between p-4 bg-[#191818] rounded-lg">
                         <div>
                           <h3 className="font-medium mb-1">Language</h3>
                           <p className="text-sm text-white/60">Select your preferred language</p>
@@ -338,7 +309,6 @@ const SettingsPage = () => {
                         </select>
                       </div>
 
-                      {/* Timezone */}
                       <div className="flex items-center justify-between p-4 bg-[#191818] rounded-lg">
                         <div>
                           <h3 className="font-medium mb-1">Timezone</h3>
@@ -357,7 +327,6 @@ const SettingsPage = () => {
                         </select>
                       </div>
 
-                      {/* Date Format */}
                       <div className="flex items-center justify-between p-4 bg-[#191818] rounded-lg">
                         <div>
                           <h3 className="font-medium mb-1">Date Format</h3>
@@ -380,7 +349,6 @@ const SettingsPage = () => {
 
              
 
-              {/* Privacy Settings */}
               {activeTab === "privacy" && (
                 <div className="space-y-8">
                   <div>
@@ -442,7 +410,6 @@ const SettingsPage = () => {
                 </div>
               )}
 
-              {/* Security Settings */}
               {activeTab === "security" && (
                 <div className="space-y-8">
                   <div>
@@ -454,7 +421,6 @@ const SettingsPage = () => {
                     <div className="space-y-6">
                       
 
-                      {/* Security Options */}
                       <div className="flex items-center justify-between p-4 bg-[#191818] rounded-lg">
                         <div>
                           <h3 className="font-medium">Two-Factor Authentication</h3>
@@ -499,7 +465,6 @@ const SettingsPage = () => {
                 </div>
               )}
 
-              {/* Data & Storage */}
               {activeTab === "data" && (
                 <div className="space-y-8">
                   <div>
@@ -509,7 +474,6 @@ const SettingsPage = () => {
                     </h2>
 
                     <div className="space-y-6">
-                      {/* Export Data */}
                       <div className="p-6 bg-[#191818] rounded-lg">
                         <div className="flex items-center justify-between mb-4">
                           <div>
@@ -529,7 +493,6 @@ const SettingsPage = () => {
 
 
                      
-                      {/* Danger Zone */}
                       <div className="p-6 bg-red-500/10 border border-red-500/20 rounded-lg">
                         <div className="flex items-center gap-3 mb-4">
                           <AlertTriangle className="w-5 h-5 text-red-400" />

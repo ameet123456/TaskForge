@@ -47,7 +47,6 @@ const ProjectDetails = () => {
     return due < now;
   };
 
-  // Filter tasks into active and deactivated
   const activeTasks = tasks.filter(task => !isTaskOverdue(task.dueDate));
   const deactivatedTasks = tasks.filter(task => isTaskOverdue(task.dueDate));
 
@@ -63,7 +62,6 @@ const ProjectDetails = () => {
       <div className="max-w-[1440px] mx-auto">
         <Breadcrumb />
         <div className="max-w-[1440px] mx-auto">
-          {/* Header with Add Task button */}
           <div className="flex justify-between items-start mb-6">
             <div>
               <h2 className="text-[40px] font-bold">{project.name}</h2>
@@ -95,7 +93,6 @@ const ProjectDetails = () => {
           </div>
         </div>
 
-        {/* Active Tasks */}
         <div className="mt-10 bg-[#191818] text-white rounded-xl">
           <h3 className="text-2xl font-semibold mb-6">Active Tasks</h3>
           {activeTasks.length > 0 ? (
@@ -174,7 +171,6 @@ const ProjectDetails = () => {
           )}
         </div>
 
-        {/* Deactivated Tasks Section */}
         {deactivatedTasks.length > 0 && (
           <div className="mt-12">
             <button

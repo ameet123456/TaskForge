@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-  useLocation,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 import Login from "./pages/Login";
 import Signin from "./pages/Signin";
@@ -22,42 +16,34 @@ import SelectTeam from "./pages/SelectTeam";
 import TeamDetails from "./pages/TeamDetails";
 import Landing from "./pages/Lending";
 
-// Import your navbar components
 import LandingNavbar from "./components/LendingNavbar";
 import WebsiteNavbar from "./components/websiteNavbar";
 import Profile from "./pages/Profile";
 import Setting from "./pages/Setting";
 import HomePage from "./pages/HomePage";
 
-// Check if user is authenticated
 const isAuthenticated = () => {
   return !!localStorage.getItem("token");
 };
 
-// Protected Route Component
 const PrivateRoute = ({ children }) => {
   return isAuthenticated() ? children : <Navigate to="/login" />;
 };
 
-// Navbar Controller Component
 const NavbarController = () => {
   const location = useLocation();
 
-  // Define which routes should show the landing navbar
   const landingRoutes = ["/", "/login", "/register"];
 
-  // Check if current route is a landing page
   const isLandingPage = landingRoutes.includes(location.pathname);
 
-  // Don't show navbar on login/register pages if you prefer
   const hideNavbarRoutes = ["/login", "/register"];
   const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname);
 
   if (shouldHideNavbar) {
-    return null; // No navbar on login/register pages
+    return null;
   }
 
-  // Return appropriate navbar based on route
   return isLandingPage ? <LandingNavbar /> : <WebsiteNavbar />;
 };
 
@@ -91,33 +77,24 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen bg-gray-50">
-        {/* Navbar Controller - automatically shows correct navbar */}
         <NavbarController />
 
-        {/* Main Content */}
         <div className="flex-1">
           <Routes>
-            {/* Landing page */}
             <Route path="/" element={<Landing />} />
 
-            {/* Auth routes */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Signin />} />
 
-            {/* Protected app routes */}
             <Route path="/welcome" element={<PrivateRoute><Welcome /></PrivateRoute>} />
             <Route path="/tasks" element={<PrivateRoute><TaskList /></PrivateRoute>} />
             <Route path="/task/new" element={<PrivateRoute><TaskForm /></PrivateRoute>} />
             <Route path="/task/edit/:id" element={<PrivateRoute><TaskForm isEdit={true} /></PrivateRoute>} />
 
-            {/* OLD ROUTE - Remove this */}
-            {/* <Route path="/task/:id" element={<PrivateRoute><TaskCart /></PrivateRoute>} /> */}
-
             <Route path="/projects" element={<PrivateRoute><ProjectList /></PrivateRoute>} />
             <Route path="/projects/:id" element={<PrivateRoute><ProjectDetails /></PrivateRoute>} />
             <Route path="/project/new" element={<PrivateRoute><ProjectForm /></PrivateRoute>} />
 
-            {/* NEW NESTED TASK ROUTE */}
             <Route path="/:projectId/:taskId" element={<PrivateRoute><TaskCart /></PrivateRoute>} />
             <Route path="/home" element={<PrivateRoute><HomePage/></PrivateRoute>}/>
             <Route path="/teams" element={<PrivateRoute><TeamList /></PrivateRoute>} />

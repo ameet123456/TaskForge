@@ -71,7 +71,6 @@ const Profile = () => {
 
   const fetchUserStats = async () => {
     try {
-      // Simulated API calls - replace with your actual API endpoints
       const [tasksRes, projectsRes] = await Promise.all([
         API.get("/tasks"),
         API.get("/projects")
@@ -105,11 +104,9 @@ const Profile = () => {
     setSuccess("");
 
     try {
-      // Replace with your actual API endpoint
       const response = await API.put(`/users/${user._id}`, formData);
       
       if (response.data.success) {
-        // Update localStorage
         const updatedUser = { ...user, ...formData };
         localStorage.setItem("user", JSON.stringify(updatedUser));
         setUser(updatedUser);
@@ -187,7 +184,6 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-[#191818] text-white px-12 py-8">
       <div className="max-w-[1440px] mx-auto">
-        {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-[40px] font-bold">My Profile</h1>
@@ -203,7 +199,6 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* Success/Error Messages */}
         {success && (
           <div className="mb-6 p-4 bg-green-500/10 border border-green-500/20 rounded-lg flex items-center gap-3">
             <CheckCircle className="w-5 h-5 text-green-400" />
@@ -219,10 +214,8 @@ const Profile = () => {
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Profile Card */}
           <div className="lg:col-span-1">
             <div className="bg-[#2d2d2d] rounded-xl p-6 sticky top-8">
-              {/* Avatar Section */}
               <div className="text-center mb-6">
                 <div className="relative inline-block">
                   <div className="w-24 h-24 rounded-full bg-[#FF1E00]/20 flex items-center justify-center text-2xl font-bold text-[#FF1E00] mb-4">
@@ -239,7 +232,6 @@ const Profile = () => {
                 </p>
               </div>
 
-              {/* Quick Stats */}
               <div className="space-y-4">
                 <div className="flex items-center justify-between p-3 bg-[#191818] rounded-lg">
                   <div className="flex items-center gap-3">
@@ -273,7 +265,6 @@ const Profile = () => {
             </div>
           </div>
 
-          {/* Profile Details */}
           <div className="lg:col-span-2">
             <div className="bg-[#2d2d2d] rounded-xl p-8">
               <div className="flex items-center justify-between mb-6">
@@ -314,7 +305,6 @@ const Profile = () => {
               </div>
 
               <div className="space-y-6">
-                {/* Full Name */}
                 <div className="space-y-2">
                   <label className="flex items-center gap-2 text-sm font-medium text-white/80">
                     <User className="w-4 h-4 text-[#FF1E00]" />
@@ -334,7 +324,6 @@ const Profile = () => {
                   )}
                 </div>
 
-                {/* Email */}
                 <div className="space-y-2">
                   <label className="flex items-center gap-2 text-sm font-medium text-white/80">
                     <Mail className="w-4 h-4 text-[#FF1E00]" />
@@ -354,7 +343,6 @@ const Profile = () => {
                   )}
                 </div>
 
-                {/* Phone */}
                 <div className="space-y-2">
                   <label className="flex items-center gap-2 text-sm font-medium text-white/80">
                     <Phone className="w-4 h-4 text-[#FF1E00]" />
@@ -374,7 +362,6 @@ const Profile = () => {
                   )}
                 </div>
 
-                {/* Location */}
                 <div className="space-y-2">
                   <label className="flex items-center gap-2 text-sm font-medium text-white/80">
                     <MapPin className="w-4 h-4 text-[#FF1E00]" />
@@ -394,7 +381,6 @@ const Profile = () => {
                   )}
                 </div>
 
-                {/* Bio */}
                 <div className="space-y-2">
                   <label className="flex items-center gap-2 text-sm font-medium text-white/80">
                     <Edit3 className="w-4 h-4 text-[#FF1E00]" />
@@ -416,7 +402,6 @@ const Profile = () => {
                   )}
                 </div>
 
-                {/* Account Details */}
                 <div className="pt-6 border-t border-gray-600">
                   <h4 className="text-lg font-semibold mb-4">Account Details</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

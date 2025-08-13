@@ -1,15 +1,15 @@
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-import API from "../api";
 import {
-  User,
-  LogOut,
-  Settings,
-  ChevronDown,
   Home,
   FolderOpen,
   Users,
+  User,
+  ChevronDown,
+  Settings,
+  LogOut,
 } from "lucide-react";
+import API from "../api";
 
 const WebsiteNavbar = () => {
   const location = useLocation();
@@ -19,7 +19,6 @@ const WebsiteNavbar = () => {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [user, setUser] = useState(null);
 
-  // Get user data from localStorage
   useEffect(() => {
     const userData = localStorage.getItem("user");
     if (userData) {
@@ -39,7 +38,6 @@ const WebsiteNavbar = () => {
 
       let projectId = null;
 
-      // Check if we're on a project details page (/projects/:id)
       if (
         pathParts[0] === "projects" &&
         pathParts[1] &&
@@ -48,9 +46,7 @@ const WebsiteNavbar = () => {
         projectId = pathParts[1];
         console.log("Navbar - Project page detected, projectId:", projectId);
       }
-      // Check if we're on a task page (/:projectId/:taskId)
       else if (pathParts.length === 2 && pathParts[0] && pathParts[1]) {
-        // This is the new nested route format
         projectId = pathParts[0];
         console.log("Navbar - Task page detected, projectId:", projectId);
       }
@@ -84,7 +80,6 @@ const WebsiteNavbar = () => {
           setLoading(false);
         }
       } else {
-        // Clear project data when not on project or task pages
         console.log("Navbar - No projectId found, clearing project");
         setProject(null);
       }
@@ -99,7 +94,6 @@ const WebsiteNavbar = () => {
     navigate("/login");
   };
 
-  // Check if we're on a project details page or task page
   const isProjectPage =
     location.pathname.startsWith("/projects/") &&
     location.pathname.split("/").length === 3;
@@ -109,15 +103,12 @@ const WebsiteNavbar = () => {
 
   const shouldShowProject = isProjectPage || isTaskPage;
 
-  // Get primary team (first team in the array)
   const primaryTeam = user?.teams?.[0];
 
   return (
     <nav className="bg-[#191818] border-b border-gray-700 px-6 py-4">
       <div className="max-w-[1440px] mx-auto flex items-center justify-between">
-        {/* Left Section - Logo and Project Info */}
         <div className="flex items-center space-x-6">
-          {/* Logo/Brand */}
           <div
             className="text-white font-bold text-xl cursor-pointer hover:text-red-500 transition-colors"
             onClick={() => navigate("/home")}
@@ -125,7 +116,6 @@ const WebsiteNavbar = () => {
             TaskFlow
           </div>
 
-          {/* Navigation Links */}
           <div className="hidden md:flex items-center space-x-4">
             <button
               onClick={() => navigate("/home")}
@@ -153,7 +143,6 @@ const WebsiteNavbar = () => {
           </div>
         </div>
 
-        {/* Center Section - Project Name */}
         {shouldShowProject && (
           <div className="hidden lg:flex items-center justify-center flex-1">
             <div className="bg-[#2d2d2d] px-4 py-2 rounded-lg border border-gray-600">
@@ -169,9 +158,7 @@ const WebsiteNavbar = () => {
           </div>
         )}
 
-        {/* Right Section - User Info */}
         <div className="flex items-center space-x-4">
-          {/* Team Info */}
           {primaryTeam && (
             <div className="hidden sm:flex items-center space-x-2 text-gray-300">
               <div className="w-2 h-2 bg-green-500 rounded-full"></div>
@@ -179,7 +166,6 @@ const WebsiteNavbar = () => {
             </div>
           )}
 
-          {/* User Menu */}
           <div className="relative">
             <button
               onClick={() => setUserMenuOpen(!userMenuOpen)}
@@ -207,7 +193,6 @@ const WebsiteNavbar = () => {
               />
             </button>
 
-            {/* Dropdown Menu */}
             {userMenuOpen && (
               <div className="absolute right-0 mt-2 w-64 bg-[#2d2d2d] border border-gray-600 rounded-lg shadow-lg z-50">
                 <div className="p-4 border-b border-gray-600">
@@ -262,7 +247,6 @@ const WebsiteNavbar = () => {
         </div>
       </div>
 
-      {/* Mobile Project Name */}
       {shouldShowProject && (
         <div className="lg:hidden mt-3 pt-3 border-t border-gray-700">
           <div className="flex items-center space-x-2">

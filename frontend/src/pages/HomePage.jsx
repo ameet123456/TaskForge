@@ -45,7 +45,6 @@ const HomePage = () => {
       fetchTeamStats(storedTeamId);
     }
 
-    // Only redirect if coming from login/team selection
     if (shouldRedirect === "true") {
       const timer = setTimeout(() => {
         if (storedRole === "team_lead") {
@@ -53,9 +52,8 @@ const HomePage = () => {
         } else if (storedRole === "team_member") {
           navigate("/tasks");
         } else {
-          navigate("/dashboard"); // for admin
+          navigate("/dashboard");
         }
-        // Clear the redirect flag after redirecting
         localStorage.removeItem("shouldRedirectFromHome");
       }, 3000);
 
@@ -159,7 +157,6 @@ const HomePage = () => {
   return (
     <div className="min-h-screen bg-[#191818] text-white px-12 py-8">
       <div className="max-w-[1440px] mx-auto">
-        {/* Welcome Header */}
         <div className="mb-8 flex flex-col sm:flex-col sm:items-left sm:justify-left">
           <h1 className="text-[32px] font-bold">
             {getGreeting()},{" "}
@@ -182,7 +179,6 @@ const HomePage = () => {
           )}
         </div>
 
-        {/* Stats Cards */}
         {loading ? (
           <div className="text-center py-16">
             <div className="w-12 h-12 border-4 border-[#FF1E00] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -190,7 +186,6 @@ const HomePage = () => {
           </div>
         ) : stats ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-            {/* Active Projects */}
             <div 
               className="bg-[#2d2d2d] rounded-xl p-6 hover:bg-[#FF1E00] transition-colors duration-200 group cursor-pointer"
               onClick={() => handleCardClick("projects")}
@@ -211,7 +206,6 @@ const HomePage = () => {
               </p>
             </div>
 
-            {/* Completed Tasks */}
             <div 
               className="bg-[#2d2d2d] rounded-xl p-6 hover:bg-[#FF1E00] transition-colors duration-200 group cursor-pointer"
               onClick={() => handleCardClick("completed")}
@@ -232,7 +226,6 @@ const HomePage = () => {
               </p>
             </div>
 
-            {/* Pending Tasks */}
             <div 
               className="bg-[#2d2d2d] rounded-xl p-6 hover:bg-[#FF1E00] transition-colors duration-200 group cursor-pointer"
               onClick={() => handleCardClick("pending")}
@@ -253,7 +246,6 @@ const HomePage = () => {
               </p>
             </div>
 
-            {/* Overdue Tasks */}
             {stats.overdueTasks > 0 && (
               <div 
                 className="bg-[#2d2d2d] rounded-xl p-6 hover:bg-[#FF1E00] transition-colors duration-200 group cursor-pointer"
@@ -282,7 +274,6 @@ const HomePage = () => {
           </div>
         )}
 
-        {/* Redirect Notice - Only show when redirecting */}
         {localStorage.getItem("shouldRedirectFromHome") === "true" && (
           <div className="text-center">
             <div className="bg-[#2d2d2d] rounded-xl p-8 max-w-md mx-auto">
@@ -300,7 +291,6 @@ const HomePage = () => {
           </div>
         )}
 
-        {/* Quick Navigation - Show when not redirecting */}
         {localStorage.getItem("shouldRedirectFromHome") !== "true" && (
           <div className="flex justify-center">
             <button

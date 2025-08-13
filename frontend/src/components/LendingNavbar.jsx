@@ -23,8 +23,7 @@ const LandingNavbar = () => {
       <nav className="bg-[#191818]/95 backdrop-blur-sm border-b border-[#333333] sticky top-0 z-50 transition-all duration-300">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex items-center justify-between h-16">
-            {/* Logo - Matching your landing page */}
-            <div className="flex items-center">
+                    <div className="flex items-center">
               <div 
                 className="cursor-pointer group"
                 onClick={() => navigate('/')}
@@ -35,7 +34,6 @@ const LandingNavbar = () => {
               </div>
             </div>
 
-            {/* Desktop Navigation */}
             <div className="hidden md:block">
               <div className="flex items-center space-x-8">
                 <button
@@ -62,8 +60,7 @@ const LandingNavbar = () => {
               </div>
             </div>
 
-            {/* Desktop Auth Buttons */}
-            <div className="hidden md:flex items-center space-x-4">
+                    <div className="hidden md:flex items-center space-x-4">
               <button
                 onClick={() => navigate('/login')}
                 className="text-gray-300 hover:text-white px-4 py-2 text-sm font-medium transition-all duration-300 hover:bg-[#333333] rounded-lg hover:scale-105"
@@ -79,8 +76,7 @@ const LandingNavbar = () => {
               </button>
             </div>
 
-            {/* Mobile menu button */}
-            <div className="md:hidden">
+                    <div className="md:hidden">
               <button
                 onClick={toggleMobileMenu}
                 className="text-gray-300 hover:text-[#FF1E00] hover:bg-[#333333] p-2 rounded-lg transition-all duration-300"
@@ -95,7 +91,6 @@ const LandingNavbar = () => {
           </div>
         </div>
 
-        {/* Mobile Navigation Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden">
             <div className="px-6 pt-2 pb-6 space-y-1 bg-[#191818] border-t border-[#333333]">
@@ -118,7 +113,6 @@ const LandingNavbar = () => {
                 About
               </button>
               
-              {/* Mobile Auth Buttons */}
               <div className="pt-4 space-y-3 border-t border-[#333333]">
                 <button
                   onClick={() => {
@@ -145,8 +139,7 @@ const LandingNavbar = () => {
         )}
       </nav>
 
-      {/* Global Styles for smooth scrolling */}
-      <style jsx global>{`
+              <style jsx global>{`
         html {
           scroll-behavior: smooth;
         }

@@ -74,7 +74,6 @@ const CreateTeamForm = () => {
   return (
     <div className="min-h-screen bg-[#191818] text-white px-12 py-8">
       <div className="max-w-[1440px] mx-auto">
-        {/* Header Section */}
         <div className="flex items-center gap-4 mb-8">
           <button
             onClick={() => navigate("/teams")}
@@ -88,7 +87,6 @@ const CreateTeamForm = () => {
           </div>
         </div>
 
-        {/* Main Form Card */}
         <div className="max-w-4xl mx-auto">
           <div className="bg-[#2d2d2d] rounded-xl p-8">
             {error && (
@@ -98,7 +96,6 @@ const CreateTeamForm = () => {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-8">
-              {/* Team Name */}
               <div className="space-y-3">
                 <label className="flex items-center gap-2 text-lg font-medium text-white">
                   <Users className="w-5 h-5 " />
@@ -114,7 +111,6 @@ const CreateTeamForm = () => {
                 />
               </div>
 
-              {/* Team Description */}
               <div className="space-y-3">
                 <label className="flex items-center gap-2 text-lg font-medium text-white">
                   <FileText className="w-5 h-5 " />
@@ -130,7 +126,6 @@ const CreateTeamForm = () => {
                 />
               </div>
 
-              {/* Team Lead Selection */}
               <div className="space-y-3">
                 <label className="flex items-center gap-2 text-lg font-medium text-white">
                   <UserCheck className="w-5 h-5 " />
@@ -158,7 +153,6 @@ const CreateTeamForm = () => {
                 </div>
               </div>
 
-              {/* Team Members Selection */}
               <div className="space-y-3">
                 <label className="flex items-center gap-2 text-lg font-medium text-white">
                   <Users className="w-5 h-5 " />
@@ -195,7 +189,6 @@ const CreateTeamForm = () => {
                 </div>
               </div>
 
-              {/* Action Buttons */}
               <div className="flex justify-between items-center pt-6 border-t border-gray-600">
                 <button
                   type="button"

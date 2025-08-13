@@ -54,7 +54,6 @@ const ProjectList = () => {
     return end < now;
   };
 
-  // Filter projects into active and deactivated
   const activeProjects = projects.filter(project => !isProjectOverdue(project.endDate));
   const deactivatedProjects = projects.filter(project => isProjectOverdue(project.endDate));
 
@@ -104,7 +103,6 @@ const ProjectList = () => {
           </button>
         </div>
 
-        {/* Active Projects */}
         {projects.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-lg text-gray-400">No projects found.</p>
@@ -185,8 +183,7 @@ const ProjectList = () => {
               </div>
             )}
 
-            {/* Deactivated Projects Section */}
-            {deactivatedProjects.length > 0 && (
+                    {deactivatedProjects.length > 0 && (
               <div className="mt-12">
                 <button
                   onClick={() => setShowDeactivatedProjects(!showDeactivatedProjects)}

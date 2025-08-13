@@ -83,7 +83,7 @@ export const getAllTeamMembers = async (req, res) => {
     }
   };
   
-export const getMyTeams = async (req, res) => {
+export const  getMyTeams = async (req, res) => {
   try {
     const userId =new mongoose.Types.ObjectId(req.user.id);
 

@@ -8,7 +8,7 @@ const Signin = () => {
     name: "",
     email: "",
     password: "",
-    role: "user"  // ✅ Default to user role to match backend schema
+    role: "user"
   });
   const [error, setError] = useState("");
 
@@ -105,7 +105,6 @@ const Signin = () => {
             </div>
           </div>
 
-          {/* Role Selection */}
           <div className="space-y-4">
             <label className="block text-sm font-medium text-gray-700">
               Select Account Type
@@ -127,7 +126,7 @@ const Signin = () => {
               <input
                 type="radio"
                 name="role"
-                value="team_lead"  // ✅ Matches backend schema
+                value="team_lead"
                 checked={formData.role === "team_lead"}
                 onChange={handleChange}
                 className="form-radio h-4 w-4 text-blue-600"
@@ -139,7 +138,7 @@ const Signin = () => {
               <input
                 type="radio"
                 name="role"
-                value="admin"  // ✅ Matches backend schema
+                value="admin"
                 checked={formData.role === "admin"}
                 onChange={handleChange}
                 className="form-radio h-4 w-4 text-blue-600"
@@ -151,7 +150,7 @@ const Signin = () => {
               <input
                 type="radio"
                 name="role"
-                value="team_member"   // ✅ Matches backend schema
+                value="team_member"
                 checked={formData.role === "team_member"}
                 onChange={handleChange}
                 className="form-radio h-4 w-4 text-blue-600"

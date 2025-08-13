@@ -145,7 +145,6 @@ const TaskList = () => {
   return (
     <div className="min-h-screen bg-[#191818] text-white px-12 py-4">
       <div className="max-w-[1440px] mx-auto">
-        {/* Greeting */}
         <div className="mb-8">
           <h1 className="text-[32px] font-bold">
             {getGreeting()}, <span className="text-[#FF1E00]">{userName}</span>
@@ -153,7 +152,6 @@ const TaskList = () => {
           <p className="text-white/80 text-sm mt-2">{formattedDate}</p>
         </div>
 
-        {/* Tasks */}
         {tasks.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-lg text-gray-400">No tasks found.</p>
@@ -210,7 +208,6 @@ const TaskList = () => {
                   </div>
 
                   <div className="flex justify-between items-center mt-auto">
-                    {/* Left Side */}
                     <div className="flex items-center gap-4 text-sm text-white">
                       <span className="font-semibold">
                         {getDaysLeft(task.dueDate)} Days Left
