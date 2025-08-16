@@ -14,6 +14,7 @@ const TaskList = () => {
   const [error, setError] = useState("");
   const [currentTime, setCurrentTime] = useState(new Date());
   const [projects, setProjects] = useState([]);
+  const [showDeactivatedTasks, setShowDeactivatedTasks] = useState(false);
   const navigate = useNavigate();
 
   const user = JSON.parse(localStorage.getItem("user"));
@@ -83,14 +84,14 @@ const TaskList = () => {
           API.get("/tasks"),
           API.get("/projects"),
         ]);
-         console.log("🔥 Task Response:", taskRes.data); 
-    console.log("🔥 Project Response:", projectRes.data); 
+        console.log("🔥 Task Response:", taskRes.data);
+        console.log("🔥 Project Response:", projectRes.data);
         if (taskRes.data.success) {
           setTasks(taskRes.data.data);
         }
 
         if (projectRes.data.success) {
-          setProjects(projectRes.data.projects); 
+          setProjects(projectRes.data.projects);
         }
       } catch (err) {
         setError("Error fetching tasks or projects.");
@@ -101,11 +102,26 @@ const TaskList = () => {
 
     fetchTasksAndProjects();
   }, []);
+
   const getDaysLeft = (endDate) => {
     const now = new Date();
     const end = new Date(endDate);
     const diff = Math.ceil((end - now) / (1000 * 60 * 60 * 24));
     return diff;
+  };
+
+  const isTaskOverdue = (dueDate) => {
+    const now = new Date();
+    const due = new Date(dueDate);
+    return due < now;
+  };
+
+  // Filter tasks into active and deactivated
+  const activeTasks = tasks.filter(task => !isTaskOverdue(task.dueDate));
+  const deactivatedTasks = tasks.filter(task => isTaskOverdue(task.dueDate));
+
+  const handleAddTask = () => {
+    navigate("/task/new");
   };
 
   const handleDelete = async (e, id) => {
@@ -124,6 +140,114 @@ const TaskList = () => {
   const handleEdit = (e, id) => {
     e.stopPropagation();
     navigate(`/task/edit/${id}`);
+  };
+
+  const renderTaskCard = (task, isDeactivated = false) => {
+    const due = getDueDateStatus(task.dueDate);
+    const taskProjectId = normalizeId(task.projectId);
+    const project = (projects || []).find(
+      (p) => normalizeId(p._id) === taskProjectId
+    );
+    const projectName = project?.name || "Unknown Project";
+
+    return (
+      <div
+        key={task._id}
+        onClick={() => navigate(`/task/${task._id}`)}
+        className={`bg-[#2d2d2d] rounded-xl p-6 flex flex-col justify-between cursor-pointer transition-all min-h-[255px] ${
+          isDeactivated
+            ? "opacity-70 border-2 border-red-500/30"
+            : "hover:bg-[#FF1E00]"
+        }`}
+      >
+        <div>
+          <div className="flex justify-between items-start mb-2">
+            <div></div>
+            <span className="text-xs flex items-center gap-1">
+              <span
+                className={`w-2 h-2 rounded-full ${
+                  isDeactivated ? "bg-red-500" : "bg-green-500"
+                }`}
+              ></span>
+              {isDeactivated ? "Overdue" : "Active"}
+            </span>
+          </div>
+          <div className="mb-4">
+            <h2 className="text-[32px] font-bold leading-[86%] mb-2">
+              {task.title}
+            </h2>
+            <p className={`text-sm mt-1 ${isDeactivated ? "text-white/60" : "text-white/80"}`}>
+              {task.description}
+            </p>
+            <span
+              className={`text-xs px-2 py-0.5 rounded-full font-semibold ${
+                isDeactivated
+                  ? "bg-red-500/20 text-red-300"
+                  : "bg-white text-black"
+              }`}
+            >
+              {task.priority?.toUpperCase()}
+            </span>
+            <div className={isDeactivated ? "text-white/60" : "text-white"}>
+              Project:{" "}
+              <span className={`font-medium ${isDeactivated ? "text-white/60" : "text-[#11111]"}`}>
+                {projectName}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex justify-between items-center mt-auto">
+          <div className={`flex items-center gap-4 text-sm ${isDeactivated ? "text-white/60" : "text-white"}`}>
+            <span className={`font-semibold ${isDeactivated ? "text-red-400" : ""}`}>
+              {isDeactivated
+                ? `${Math.abs(getDaysLeft(task.dueDate))} Days Overdue`
+                : `${getDaysLeft(task.dueDate)} Days Left`}
+            </span>
+            <span className={isDeactivated ? "text-gray-500" : "text-gray-400"}>
+              {task.state}
+            </span>
+            <span className={`flex items-center gap-1 ${isDeactivated ? "text-gray-400" : "text-gray-300"}`}>
+              <svg
+                className={`w-4 h-4 ${isDeactivated ? "text-gray-400" : "text-gray-300"}`}
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 2a4 4 0 100 8 4 4 0 000-8zm-7 14a7 7 0 0114 0H3z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              {task.assignedTo?.name || "Unassigned"}
+            </span>
+          </div>
+          <button
+            onClick={() => navigate(`/task/${task._id}`)}
+            className={`w-8 h-8 rounded-full flex items-center justify-center transition ${
+              isDeactivated
+                ? "bg-white/20 hover:bg-white/30"
+                : "bg-white hover:bg-gray-200"
+            }`}
+          >
+            <svg
+              className={`w-4 h-4 ${isDeactivated ? "text-white/60" : "text-[#FF1E00]"}`}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M7 17L17 7M7 7h10v10"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    );
   };
 
   if (loading) {
@@ -145,11 +269,33 @@ const TaskList = () => {
   return (
     <div className="min-h-screen bg-[#191818] text-white px-12 py-4">
       <div className="max-w-[1440px] mx-auto">
-        <div className="mb-8">
-          <h1 className="text-[32px] font-bold">
-            {getGreeting()}, <span className="text-[#FF1E00]">{userName}</span>
-          </h1>
-          <p className="text-white/80 text-sm mt-2">{formattedDate}</p>
+        {/* Header with greeting and Add Task button */}
+        <div className="mb-8 flex justify-between items-start">
+          <div>
+            <h1 className="text-[32px] font-bold">
+              {getGreeting()}, <span className="text-[#FF1E00]">{userName}</span>
+            </h1>
+            <p className="text-white/80 text-sm mt-2">{formattedDate}</p>
+          </div>
+          <button
+            onClick={handleAddTask}
+            className="bg-[#FF1E00] hover:bg-[#FF1E00]/80 text-white px-6 py-3 rounded-xl font-semibold transition-colors duration-200 flex items-center gap-2"
+          >
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
+            Add Task
+          </button>
         </div>
 
         {tasks.length === 0 ? (
@@ -163,100 +309,61 @@ const TaskList = () => {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {tasks.map((task) => {
-              const due = getDueDateStatus(task.dueDate);
-              const taskProjectId = normalizeId(task.projectId);
-              const project = (projects || []).find(
-                (p) => normalizeId(p._id) === taskProjectId
-              );
-              const projectName = project?.name || "Unknown Project";
-
-              return (
-                <div
-                  key={task._id}
-                  onClick={() => navigate(`/task/${task._id}`)}
-                  className="bg-[#2d2d2d] rounded-xl p-6 flex flex-col justify-between hover:bg-[#FF1E00] cursor-pointer transition-all"
-                >
-                  <div>
-                    <div>
-                      <div className="flex justify-between items-start mb-2">
-                        <div></div>
-                        <span className="text-xs text-white/70 flex items-center gap-1">
-                          <span className="w-2 h-2 rounded-full bg-green-500"></span>
-                          Active
-                        </span>
-                      </div>
-                      <div className="mb-4">
-                        <h2 className="text-[32px] font-bold leading-[86%] mb-2">
-                          {task.title}
-                        </h2>
-                        <p className="text-sm text-white/80 mt-1">
-                          {task.description}
-                        </p>
-                        <span className="text-xs bg-white text-black px-2 py-0.5 rounded-full font-semibold">
-                          {task.priority?.toUpperCase()}
-                        </span>
-                        <div>
-                          Project:{" "}
-                          <span className="text-[#11111] font-medium">
-                            {projectName}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex justify-between items-center mt-auto">
-                    <div className="flex items-center gap-4 text-sm text-white">
-                      <span className="font-semibold">
-                        {getDaysLeft(task.dueDate)} Days Left
-                      </span>
-                      <span className="text-gray-400">{task.state}</span>
-                      <span className="flex items-center gap-1 text-gray-300">
-                        <svg
-                          className="w-4 h-4 text-gray-300"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M10 2a4 4 0 100 8 4 4 0 000-8zm-7 14a7 7 0 0114 0H3z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-
-                        {task.assignedTo?.name || "Unassigned"}
-                      </span>
-                    </div>
-                    <button
-                      onClick={() => navigate(`/task/${task._id}`)}
-                      className="w-8 h-8 rounded-full bg-white hover:bg-gray-200 flex items-center justify-center transition"
-                    >
-                      <svg
-                        className="w-4 h-4 text-[#FF1E00]"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M7 17L17 7M7 7h10v10"
-                        />
-                      </svg>
-                    </button>
-                  </div>
+          <>
+            {/* Active Tasks */}
+            {activeTasks.length > 0 && (
+              <div className="mb-10">
+                <h2 className="text-2xl font-semibold mb-6">Active Tasks</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {activeTasks.map((task) => renderTaskCard(task, false))}
                 </div>
-              );
-            })}
-          </div>
+              </div>
+            )}
+
+            {/* No active tasks message */}
+            {activeTasks.length === 0 && deactivatedTasks.length > 0 && (
+              <div className="text-center py-8">
+                <p className="text-lg text-gray-400">No active tasks found.</p>
+              </div>
+            )}
+
+            {/* Deactivated Tasks Section */}
+            {deactivatedTasks.length > 0 && (
+              <div className="mt-12">
+                <button
+                  onClick={() => setShowDeactivatedTasks(!showDeactivatedTasks)}
+                  className="flex items-center gap-3 text-xl font-semibold text-gray-400 hover:text-white transition-colors duration-200"
+                >
+                  <span>Deactivated Tasks ({deactivatedTasks.length})</span>
+                  <svg
+                    className={`w-5 h-5 transform transition-transform duration-200 ${
+                      showDeactivatedTasks ? "rotate-180" : ""
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+
+                {showDeactivatedTasks && (
+                  <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {deactivatedTasks.map((task) => renderTaskCard(task, true))}
+                  </div>
+                )}
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
   );
-};
+};  
 
 export default TaskList;

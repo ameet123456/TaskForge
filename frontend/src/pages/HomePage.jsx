@@ -32,7 +32,7 @@ const HomePage = () => {
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
-    const storedTeamName = localStorage.getItem("teamName");
+    const storedTeamName = localStorage.getItem("teamName") ;
     const storedRole = localStorage.getItem("role");
     const storedTeamId = localStorage.getItem("teamId");
     const shouldRedirect = localStorage.getItem("shouldRedirectFromHome");

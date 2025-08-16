@@ -8,6 +8,7 @@ import {
   ChevronDown,
   Settings,
   LogOut,
+  CheckSquare,
 } from "lucide-react";
 import API from "../api";
 
@@ -104,6 +105,52 @@ const WebsiteNavbar = () => {
   const shouldShowProject = isProjectPage || isTaskPage;
 
   const primaryTeam = user?.teams?.[0];
+  
+  // Check if user is ONLY a regular team member (not admin, not team leader)
+  const isOnlyTeamMember = !user?.isAdmin && primaryTeam?.role && primaryTeam.role !== 'team_lead';
+  
+  // Determine what to show in navigation based on user role
+  const getProjectsNavigation = () => {
+    // Only regular team members see "Tasks", everyone else sees "Projects"
+    if (isOnlyTeamMember) {
+      return {
+        label: "Tasks",
+        icon: CheckSquare,
+        path: "/tasks"
+      };
+    } else {
+      return {
+        label: "Projects", 
+        icon: FolderOpen,
+        path: "/projects"
+      };
+    }
+  };
+
+  const getTeamsNavigation = () => {
+    if (user?.isAdmin) {
+      return {
+        label: "Teams",
+        icon: Users,
+        path: "/teams"
+      };
+    } else if (primaryTeam?.teamId) {
+      return {
+        label: "Team",
+        icon: Users,
+        path: `/teams/${primaryTeam.teamId}`
+      };
+    } else {
+      return {
+        label: "Team",
+        icon: Users,
+        path: "/team"
+      };
+    }
+  };
+
+  const projectsNav = getProjectsNavigation();
+  const teamsNav = getTeamsNavigation();
 
   return (
     <nav className="bg-[#191818] border-b border-gray-700 px-6 py-4">
@@ -126,19 +173,19 @@ const WebsiteNavbar = () => {
             </button>
 
             <button
-              onClick={() => navigate("/projects")}
+              onClick={() => navigate(projectsNav.path)}
               className="flex items-center space-x-2 text-gray-300 hover:text-white px-3 py-2 rounded-lg hover:bg-gray-700 transition-colors"
             >
-              <FolderOpen className="w-4 h-4" />
-              <span>Projects</span>
+              <projectsNav.icon className="w-4 h-4" />
+              <span>{projectsNav.label}</span>
             </button>
 
             <button
-              onClick={() => navigate("/teams")}
+              onClick={() => navigate(teamsNav.path)}
               className="flex items-center space-x-2 text-gray-300 hover:text-white px-3 py-2 rounded-lg hover:bg-gray-700 transition-colors"
             >
-              <Users className="w-4 h-4" />
-              <span>Teams</span>
+              <teamsNav.icon className="w-4 h-4" />
+              <span>{teamsNav.label}</span>
             </button>
           </div>
         </div>

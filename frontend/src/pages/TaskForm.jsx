@@ -7,7 +7,6 @@ import {
   FileText,
   Calendar,
   Flag,
-
   User,
   Building2,
   Loader2,
@@ -25,7 +24,8 @@ const TaskForm = () => {
     state: "pending",
     priority: "medium",
     assignedTo: "",
-    projectId: ""
+    projectId: "",
+    
   });
 
   const [teams, setTeams] = useState([]);

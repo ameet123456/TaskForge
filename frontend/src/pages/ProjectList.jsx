@@ -54,6 +54,7 @@ const ProjectList = () => {
     return end < now;
   };
 
+  // Filter projects into active and deactivated
   const activeProjects = projects.filter(project => !isProjectOverdue(project.endDate));
   const deactivatedProjects = projects.filter(project => isProjectOverdue(project.endDate));
 
@@ -80,6 +81,7 @@ const ProjectList = () => {
   return (
     <div className="min-h-screen bg-[#191818] text-white px-12 py-8">
       <div className="max-w-[1440px] mx-auto">
+        {/* Header with Add Project button */}
         <div className="flex justify-between items-center mb-8">
           <Breadcrumb />
           <button
@@ -109,6 +111,7 @@ const ProjectList = () => {
           </div>
         ) : (
           <>
+            {/* Active Projects */}
             {activeProjects.length > 0 && (
               <div className="mb-10">
                 <h2 className="text-2xl font-semibold mb-6">Active Projects</h2>
@@ -171,19 +174,15 @@ const ProjectList = () => {
               </div>
             )}
 
-            {activeProjects.length === 0 && deactivatedProjects.length === 0 && (
-              <div className="text-center py-16">
-                <p className="text-lg text-gray-400">No projects found.</p>
-              </div>
-            )}
-
+            {/* No active projects message */}
             {activeProjects.length === 0 && deactivatedProjects.length > 0 && (
               <div className="text-center py-8">
                 <p className="text-lg text-gray-400">No active projects found.</p>
               </div>
             )}
 
-                    {deactivatedProjects.length > 0 && (
+            {/* Deactivated Projects Section */}
+            {deactivatedProjects.length > 0 && (
               <div className="mt-12">
                 <button
                   onClick={() => setShowDeactivatedProjects(!showDeactivatedProjects)}
