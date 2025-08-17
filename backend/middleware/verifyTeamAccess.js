@@ -1,5 +1,4 @@
 import Project from "../models/project_model.js";
-import TeamMember from "../models/team_member_model.js";
 
 const verifyTeamAccess = async (req, res, next) => {
   try {
@@ -13,19 +12,26 @@ const verifyTeamAccess = async (req, res, next) => {
     if (!project) {
       return res.status(404).json({ success: false, message: "Project not found" });
     }
+
+    // Admin shortcut
     if (req.user.isAdmin) {
-      console.log("Admin bypass access granted");
-      
+      console.log("🔓 Admin bypass access granted");
       req.project = project;
       return next();
     }
 
-    const isMember = await TeamMember.findOne({
-      user: req.user.id,
-      team: project.team
-    });
+    if (!project.team) {
+      return res.status(400).json({ success: false, message: "Project has no team assigned" });
+    }
 
-    if (!isMember) {
+    const projectTeamId = project.team.toString();
+    const userTeams = req.user.teams?.map(t => t.teamId) || [];
+
+    console.log("🔎 Checking team access...");
+    console.log("   Project team:", projectTeamId);
+    console.log("   User teams:", userTeams);
+
+    if (!userTeams.includes(projectTeamId)) {
       return res.status(403).json({
         success: false,
         message: "Access denied. You're not a member of this project’s team.",
@@ -33,11 +39,9 @@ const verifyTeamAccess = async (req, res, next) => {
     }
 
     req.project = project;
-    req.teamMember = isMember;
-
     next();
   } catch (err) {
-    console.error("Error in verifyTeamAccess:", err.message);
+    console.error("❌ Error in verifyTeamAccess:", err.message);
     res.status(500).json({ success: false, message: "Server error in access verification" });
   }
 };

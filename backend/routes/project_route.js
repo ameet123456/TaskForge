@@ -11,7 +11,7 @@ import {
 } from "../controller/projectController.js";
 const router = express.Router();
 router.post("/", authMiddleware, verifyRole("team_lead","admin"), createProject);
-router.get("/", authMiddleware, verifyRole("team_lead", "team_member","team_member"), getProject);
+router.get("/", authMiddleware, verifyRole("team_lead", "team_member","team_member","admin"), getProject);
 router.get("/:id",
   authMiddleware,
   verifyRole("team_lead", "admin","team_member"),

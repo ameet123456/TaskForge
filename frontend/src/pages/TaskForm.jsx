@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import API from "../api";
 import { 
   ArrowLeft,
@@ -16,6 +16,7 @@ import Breadcrumb from "../components/Breadcrumb";
 
 const TaskForm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   
   const [formData, setFormData] = useState({
     title: "",
@@ -25,7 +26,7 @@ const TaskForm = () => {
     priority: "medium",
     assignedTo: "",
     projectId: "",
-    
+    teamId: ""
   });
 
   const [teams, setTeams] = useState([]);
@@ -34,19 +35,233 @@ const TaskForm = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [selectedTeamInfo, setSelectedTeamInfo] = useState(null);
+  const [selectedProjectInfo, setSelectedProjectInfo] = useState(null);
+
+  // Check if projectId is coming from navigation
+  const isProjectFromNavigation = location.state?.projectId;
 
   useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem("user"));
-    setUser(userData);
+    const initializeForm = async () => {
+      const userData = JSON.parse(localStorage.getItem("user"));
+      setUser(userData);
 
-    if (userData?.isAdmin) {
-      fetchTeams();
-    } else if (userData?.teamId) {
-      setFormData((prev) => ({ ...prev, teamId: userData.teamId }));
-      fetchTeamMembers(userData.teamId);
-      fetchProjects(userData.teamId);
+      const { projectId, projectName, teamId } = location.state || {};
+
+      if (userData?.isAdmin) {
+        await fetchTeams();
+        
+        if (projectId) {
+          setFormData(prev => ({ ...prev, projectId, teamId: teamId || "" }));
+          if (teamId) {
+            await fetchTeamMembers(teamId);
+          }
+          if (projectName) {
+            setSelectedProjectInfo({ name: projectName });
+          } else {
+            await fetchProjectDetails(projectId);
+          }
+        }
+      } else if (userData?.teams && userData.teams.length > 0) {
+        if (projectId) {
+          await handleProjectFromNavigation(userData, projectId, teamId);
+        } else {
+          await autoSelectTeamAndProject(userData);
+        }
+      }
+    };
+
+    initializeForm();
+  }, [location.state]);
+
+  const handleProjectFromNavigation = async (userData, projectId, teamId) => {
+    try {
+      const projectResponse = await API.get(`/projects/${projectId}`);
+      const project = projectResponse.data.project;
+      
+      // Extract the actual team ID properly
+      let actualTeamId;
+      if (teamId) {
+        actualTeamId = teamId;
+      } else if (typeof project.team === 'object' && project.team._id) {
+        actualTeamId = project.team._id;
+      } else if (typeof project.team === 'string') {
+        actualTeamId = project.team;
+      } else if (project.teamId) {
+        actualTeamId = project.teamId;
+      }
+      
+      // Find team info
+      let teamInfo = null;
+      if (userData.teams && userData.teams.length > 0) {
+        teamInfo = userData.teams.find(team => team._id === actualTeamId);
+      }
+      
+      // If not found in userData.teams, use the team info from project
+      if (!teamInfo && typeof project.team === 'object') {
+        teamInfo = {
+          _id: project.team._id,
+          name: project.team.name
+        };
+      }
+      
+      // If still not found, fetch from API
+      if (!teamInfo && actualTeamId) {
+        try {
+          const teamResponse = await API.get(`/teams/${actualTeamId}`);
+          teamInfo = teamResponse.data.team || teamResponse.data;
+        } catch (error) {
+          console.error("Error fetching team details:", error);
+        }
+      }
+      
+      setSelectedTeamInfo(teamInfo);
+      
+      setSelectedProjectInfo({
+        name: project.name,
+        description: project.description
+      });
+      
+      setFormData(prev => ({
+        ...prev,
+        projectId: projectId,
+        teamId: actualTeamId
+      }));
+      
+      if (actualTeamId) {
+        await fetchTeamMembers(actualTeamId);
+      }
+      
+    } catch (error) {
+      console.error("Error handling project from navigation:", error);
+      setError("Failed to load project information.");
     }
-  }, []);
+  };
+
+  const fetchProjectDetails = async (projectId) => {
+    try {
+      const response = await API.get(`/projects/${projectId}`);
+      const project = response.data.project;
+      
+      setSelectedProjectInfo({
+        name: project.name,
+        description: project.description
+      });
+      
+      return project;
+    } catch (error) {
+      console.error("Error fetching project details:", error);
+      setError("Failed to load project details.");
+    }
+  };
+
+  const autoSelectTeamAndProject = async (userData) => {
+    try {
+      // Debug: Check what's in localStorage and userData
+      console.log("🔍 DEBUG - localStorage teamId:", localStorage.getItem("teamId"));
+      console.log("🔍 DEBUG - userData.teamId:", userData.teamId);
+      console.log("🔍 DEBUG - userData.teams:", userData.teams);
+      console.log("🔍 DEBUG - first team ID:", userData.teams?.[0]?._id);
+      
+      const currentTeamId = localStorage.getItem("teamId") || userData.teamId || userData.teams?.[0]?.teamId;
+      console.log("🔍 DEBUG - Final currentTeamId:", currentTeamId);
+      
+      let activeTeam = null;
+      
+      // Try to find the team in userData.teams
+      if (userData.teams && userData.teams.length > 0) {
+        console.log("🔍 DEBUG - Searching for team in userData.teams...");
+        activeTeam = userData.teams.find(team => team.teamId === currentTeamId);
+        console.log("🔍 DEBUG - Found activeTeam in userData.teams:", activeTeam);
+        
+        // If not found by ID, try the first team
+        if (!activeTeam) {
+          activeTeam = userData.teams[0];
+          console.log("🔍 DEBUG - Using first team as fallback:", activeTeam);
+        }
+      }
+      
+      // If still no team found, fetch from API
+      if (!activeTeam && currentTeamId) {
+        console.log("🔍 DEBUG - Fetching team from API with ID:", currentTeamId);
+        try {
+          const teamResponse = await API.get(`/teams/${currentTeamId}`);
+          activeTeam = teamResponse.data.team || teamResponse.data;
+          console.log("🔍 DEBUG - Team fetched from API:", activeTeam);
+        } catch (error) {
+          console.error("❌ Error fetching team from API:", error);
+        }
+      }
+      
+      console.log("🔍 DEBUG - Final activeTeam:", activeTeam);
+      
+      // Transform the team object to match expected structure for display
+      const teamInfoForDisplay = activeTeam ? {
+        _id: activeTeam.teamId,
+        name: activeTeam.teamName,
+        role: activeTeam.role
+      } : null;
+      
+      console.log("🔍 DEBUG - teamInfoForDisplay:", teamInfoForDisplay);
+      setSelectedTeamInfo(teamInfoForDisplay);
+      
+      const teamIdToUse = activeTeam?.teamId || currentTeamId;
+      console.log("🔍 DEBUG - teamIdToUse:", teamIdToUse);
+      setFormData(prev => ({ ...prev, teamId: teamIdToUse }));
+      
+      if (teamIdToUse) {
+        console.log("🔍 DEBUG - Fetching team members and projects for team:", teamIdToUse);
+        await fetchTeamMembers(teamIdToUse);
+        await autoSelectProject(teamIdToUse);
+      } else {
+        console.log("❌ DEBUG - No teamIdToUse found, skipping team members and projects fetch");
+      }
+      
+    } catch (error) {
+      console.error("❌ Error in auto-selecting team and project:", error);
+      setError("Failed to load team and project information.");
+    }
+  };
+
+  const autoSelectProject = async (teamId) => {
+    try {
+      console.log("🔍 DEBUG - autoSelectProject called with teamId:", teamId);
+      const response = await API.get("/projects");
+      console.log("🔍 DEBUG - All projects from API:", response.data.projects);
+      
+      const teamProjects = response.data.projects.filter(
+        (project) => {
+          console.log("🔍 DEBUG - Checking project:", project.name, "project.team:", project.team, "teamId:", teamId);
+          return project.team?.toString() === teamId.toString();
+        }
+      );
+      
+      console.log("🔍 DEBUG - Filtered teamProjects:", teamProjects);
+      
+      if (teamProjects.length > 0) {
+        const selectedProject = teamProjects[0];
+        console.log("🔍 DEBUG - Selected first project:", selectedProject);
+        
+        setSelectedProjectInfo({
+          name: selectedProject.name,
+          description: selectedProject.description
+        });
+        
+        setFormData(prev => ({ 
+          ...prev, 
+          projectId: selectedProject._id 
+        }));
+        
+        setProjects(teamProjects);
+      } else {
+        console.log("❌ DEBUG - No projects found for teamId:", teamId);
+        setError("No projects available for your team. Please contact your admin.");
+      }
+    } catch (error) {
+      console.error("❌ Error auto-selecting project:", error);
+      setError("Failed to load project information.");
+    }
+  };
 
   const fetchTeams = async () => {
     try {
@@ -54,51 +269,63 @@ const TaskForm = () => {
       setTeams(response.data.data);
     } catch (err) {
       console.error("Error fetching teams:", err);
+      setError("Failed to load teams.");
     }
   };
 
-  const fetchTeamMembers = async (teamId) => {
+  const fetchTeamMembers = async (team) => {
     try {
+      const teamId = team._id || team; 
       const response = await API.get(`/team-members/${teamId}`);
+  
       if (response.data.success) {
         setTeamMembers(response.data.members);
       }
     } catch (err) {
       console.error("Error fetching team members:", err);
+      setError("Failed to load team members.");
     }
   };
 
   const fetchProjects = async (teamId) => {
     try {
       const response = await API.get("/projects");
+      
       const filteredProjects = response.data.projects.filter(
-        (project) => project.teamId?.toString() === teamId.toString()
+        (project) => project.team?.toString() === teamId.toString()
       );
+      
       setProjects(filteredProjects);
     } catch (err) {
       console.error("Error fetching projects:", err);
+      setError("Failed to load projects.");
     }
   };
 
   const handleProjectChange = async (e) => {
     const selectedProjectId = e.target.value;
+    
     setFormData((prev) => ({
       ...prev,
       projectId: selectedProjectId,
       assignedTo: ""
     }));
 
-    try {
-      const res = await API.get(`/projects/${selectedProjectId}`);
-      const teamId = res.data.project.teamId;
-      fetchTeamMembers(teamId);
-    } catch (err) {
-      console.error("Failed to fetch team from project:", err);
+    if (selectedProjectId) {
+      try {
+        const res = await API.get(`/projects/${selectedProjectId}`);
+        const teamId = res.data.project.team || res.data.project.teamId;
+        fetchTeamMembers(teamId);
+      } catch (err) {
+        console.error("Failed to fetch team from project:", err);
+        setError("Failed to load project details.");
+      }
     }
   };
 
   const handleTeamChange = async (e) => {
     const selectedTeamId = e.target.value;
+    
     setFormData((prev) => ({
       ...prev,
       teamId: selectedTeamId,
@@ -106,8 +333,10 @@ const TaskForm = () => {
       assignedTo: ""
     }));
 
-    fetchTeamMembers(selectedTeamId);
-    fetchProjects(selectedTeamId);
+    if (selectedTeamId) {
+      fetchTeamMembers(selectedTeamId);
+      fetchProjects(selectedTeamId);
+    }
   };
 
   const handleChange = (e) => {
@@ -120,21 +349,28 @@ const TaskForm = () => {
       setError("All fields are required.");
       return false;
     }
+    
+    if (!user?.isAdmin && !formData.projectId) {
+      setError("Project selection is required.");
+      return false;
+    }
+    
     return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
+  
     if (!validateForm()) return;
-
+  
     setLoading(true);
     try {
       const response = await API.post("/tasks", formData);
+      
       if (response.data.success) {
-        console.log("Task created successfully!");
-        navigate("/tasks");
+        // Navigate to the project details page using the projectId from formData
+        navigate(`/projects/${formData.projectId}`);
       } else {
         setError("Task creation failed.");
       }
@@ -146,14 +382,9 @@ const TaskForm = () => {
     }
   };
 
- 
-
-
-
   return (
     <div className="min-h-screen bg-[#191818] text-white px-12 py-8">
       <div className="max-w-[1440px] mx-auto">
-    
         <div className="flex items-center gap-4 mb-8">
           <button
             onClick={() => navigate("/tasks")}
@@ -177,13 +408,18 @@ const TaskForm = () => {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-8">
-              {user?.isAdmin && (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-6 border-b border-gray-600">
-                  <div className="space-y-3">
-                    <label className="flex items-center gap-2 text-lg font-medium text-white">
-                      <Building2 className="w-5 h-5  " />
-                      Select Team
-                    </label>
+              {/* Team and Project Info - Show dropdown if no projectId from navigation, otherwise show read-only */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-6 border-b border-gray-600">
+                
+                {/* Team Selection/Info */}
+                <div className="space-y-3">
+                  <label className="flex items-center gap-2 text-lg font-medium text-white">
+                    <Building2 className="w-5 h-5" />
+                    {user?.isAdmin ? 'Select Team' : 'Team'}
+                  </label>
+                  
+                  {user?.isAdmin ? (
+                    // Admin: Show team dropdown
                     <div className="relative">
                       <select
                         name="teamId"
@@ -205,13 +441,27 @@ const TaskForm = () => {
                         </svg>
                       </div>
                     </div>
-                  </div>
+                  ) : (
+                    // Non-admin: Show selected team info (read-only)
+                    <div className="w-full bg-[#191818] border border-gray-600 text-white p-4 rounded-lg">
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium">
+                          {selectedTeamInfo?.name || 'Loading...'}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
 
-                  <div className="space-y-3">
-                    <label className="flex items-center gap-2 text-lg font-medium text-white">
-                      <CheckSquare className="w-5 h-5  " />
-                      Select Project
-                    </label>
+                {/* Project Selection/Info */}
+                <div className="space-y-3">
+                  <label className="flex items-center gap-2 text-lg font-medium text-white">
+                    <CheckSquare className="w-5 h-5" />
+                    {!isProjectFromNavigation ? 'Select Project' : 'Project'}
+                  </label>
+                  
+                  {!isProjectFromNavigation ? (
+                    // No projectId from navigation: Show project dropdown
                     <div className="relative">
                       <select
                         name="projectId"
@@ -233,14 +483,28 @@ const TaskForm = () => {
                         </svg>
                       </div>
                     </div>
-                  </div>
+                  ) : (
+                    // ProjectId from navigation: Show selected project info (read-only)
+                    <div className="w-full bg-[#191818] border border-gray-600 text-white p-4 rounded-lg">
+                      <div className="flex flex-col">
+                        <span className="font-medium">
+                          {selectedProjectInfo?.name || 'Loading...'}
+                        </span>
+                        {selectedProjectInfo?.description && (
+                          <span className="text-sm text-gray-400 mt-1">
+                            {selectedProjectInfo.description}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
 
               <div className="space-y-6">
                 <div className="space-y-3">
                   <label className="flex items-center gap-2 text-lg font-medium text-white">
-                    <CheckSquare className="w-5 h-5  " />
+                    <CheckSquare className="w-5 h-5" />
                     Task Title
                   </label>
                   <input
@@ -256,7 +520,7 @@ const TaskForm = () => {
 
                 <div className="space-y-3">
                   <label className="flex items-center gap-2 text-lg font-medium text-white">
-                    <FileText className="w-5 h-5  " />
+                    <FileText className="w-5 h-5" />
                     Description
                   </label>
                   <textarea
@@ -273,7 +537,7 @@ const TaskForm = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="space-y-3">
                     <label className="flex items-center gap-2 text-lg font-medium text-white">
-                      <Calendar className="w-5 h-5  " />
+                      <Calendar className="w-5 h-5" />
                       Due Date
                     </label>
                     <input
@@ -288,7 +552,7 @@ const TaskForm = () => {
 
                   <div className="space-y-3">
                     <label className="flex items-center gap-2 text-lg font-medium text-white">
-                      <Flag className="w-5 h-5  " />
+                      <Flag className="w-5 h-5" />
                       Priority
                     </label>
                     <div className="relative">
@@ -309,13 +573,12 @@ const TaskForm = () => {
                         </svg>
                       </div>
                     </div>
-                    
                   </div>
 
                   <div className="space-y-3">
                     <label className="flex items-center gap-2 text-lg font-medium text-white">
-                      <User className="w-5 h-5  " />
-                      Assign To
+                      <User className="w-5 h-5" />
+                      Assign To Team Member
                     </label>
                     <div className="relative">
                       <select
@@ -326,7 +589,7 @@ const TaskForm = () => {
                         disabled={teamMembers.length === 0}
                       >
                         <option value="" className="bg-[#191818]">
-                          {teamMembers.length === 0 ? "No team members available" : "Leave unassigned"}
+                          {teamMembers.length === 0 ? "Loading team members..." : "Leave unassigned"}
                         </option>
                         {teamMembers.map((member) => (
                           <option key={member._id} value={member._id} className="bg-[#191818]">
@@ -341,7 +604,7 @@ const TaskForm = () => {
                       </div>
                     </div>
                     {formData.assignedTo && (
-                      <div className="flex items-center gap-2 text-sm  ">
+                      <div className="flex items-center gap-2 text-sm text-green-400">
                         <User className="w-4 h-4" />
                         <span>Task will be assigned to {teamMembers.find(m => m._id === formData.assignedTo)?.name}</span>
                       </div>
@@ -360,7 +623,7 @@ const TaskForm = () => {
                 </button>
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || (!user?.isAdmin && !formData.projectId)}
                   className="bg-[#FF1E00] hover:bg-red-600 disabled:bg-red-800 disabled:cursor-not-allowed text-white px-8 py-3 rounded-lg transition-colors duration-200 flex items-center gap-2 min-w-[140px] justify-center"
                 >
                   {loading ? (

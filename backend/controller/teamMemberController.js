@@ -2,6 +2,7 @@ import Team from "../models/team_model.js";
 import User from "../models/user_model.js";
 import TeamMember from "../models/team_member_model.js";  
 import mongoose from "mongoose";
+
 export const updateTeamMemberRole = async (req, res) => {
   try {
     const { teamId, userId } = req.params;
@@ -44,11 +45,24 @@ export const updateTeamMemberRole = async (req, res) => {
 export const getAllTeamMembers = async (req, res) => {
   try {
     const { teamId } = req.params;
+    
+    
+    if (!mongoose.Types.ObjectId.isValid(teamId)) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Invalid team ID format' 
+      });
+    }
 
+    console.log("Fetching team members for teamId:", teamId);
+    
     const members = await TeamMember.find({ team: teamId }).populate('user', 'name email');
 
     if (!members || members.length === 0) {
-      return res.status(404).json({ message: 'No team members found' });
+      return res.status(404).json({ 
+        success: false, 
+        message: 'No team members found' 
+      });
     }
 
     const formattedMembers = members.map(m => ({
@@ -58,54 +72,59 @@ export const getAllTeamMembers = async (req, res) => {
       role: m.role,
     }));
 
+    console.log("Found team members:", formattedMembers);
     res.status(200).json({ success: true, members: formattedMembers });
   } catch (error) {
-          console.error('Error fetching team members:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error('Error fetching team members:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Server error',
+      error: error.message 
+    });
   }
 };
 
-
-  export const getSingleTeamMember = async (req, res) => {
-    try {
-      const { teamId, userId } = req.params;
-  
-      const member = await TeamMember.findOne({ team: teamId, user: userId }).populate("user", "name email role");
-  
-      if (!member) {
-        return res.status(404).json({ message: "Team member not found" });
-      }
-  
-      res.status(200).json({ success: true, member });
-    } catch (error) {
-      console.error("Error fetching single team member:", error);
-      res.status(500).json({ message: "Server error" });
-    }
-  };
-  
-export const  getMyTeams = async (req, res) => {
+export const getSingleTeamMember = async (req, res) => {
   try {
-    const userId =new mongoose.Types.ObjectId(req.user.id);
+    const { teamId, userId } = req.params;
+
+    const member = await TeamMember.findOne({ team: teamId, user: userId }).populate("user", "name email role");
+
+    if (!member) {
+      return res.status(404).json({ message: "Team member not found" });
+    }
+
+    res.status(200).json({ success: true, member });
+  } catch (error) {
+    console.error("Error fetching single team member:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+  
+export const getMyTeams = async (req, res) => {
+  try {
+    const userId = new mongoose.Types.ObjectId(req.user.id);
 
     const memberships = await TeamMember.find({ user: userId })
-    .populate("team", "name")
+      .populate("team", "name");
 
     const formattedTeams = memberships.map((m) => ({
-      teamId: m.team.id,
-      teamName: m.team.teamName,
+      teamId: m.team._id.toString(), // ← Fixed: use _id instead of id
+      teamName: m.team.name, // ← Fixed: use name instead of teamName (based on populate)
       role: m.role
     }));
 
+    console.log("User teams:", formattedTeams);
     res.status(200).json(formattedTeams);
   } catch (error) {
     console.error("Error fetching user's teams:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
+
 export const removeUserFromTeam = async (req, res) => {
   try {
     const { teamId, userId } = req.params;
-
 
     const team = await Team.findById(teamId);
     if (!team) return res.status(404).json({ message: "Team not found" });

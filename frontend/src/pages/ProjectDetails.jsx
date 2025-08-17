@@ -51,7 +51,13 @@ const ProjectDetails = () => {
   const deactivatedTasks = tasks.filter(task => isTaskOverdue(task.dueDate));
 
   const handleAddTask = () => {
-    navigate("/task/new", { state: { projectId: id } });
+    navigate("/task/new", { 
+      state: { 
+        projectId: id,
+        projectName: project?.name, // Pass project name for display
+        teamId: project?.team || project?.teamId // Pass team ID
+      }
+    });
   };
 
   if (loading) return <p className="text-center mt-10">Loading project...</p>;

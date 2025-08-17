@@ -35,7 +35,7 @@ const WebsiteNavbar = () => {
   useEffect(() => {
     const fetchProject = async () => {
       const pathParts = location.pathname.split("/").filter(Boolean);
-      console.log("Navbar - Current path parts:", pathParts);
+   
 
       let projectId = null;
 
@@ -45,33 +45,23 @@ const WebsiteNavbar = () => {
         pathParts[1] !== "new"
       ) {
         projectId = pathParts[1];
-        console.log("Navbar - Project page detected, projectId:", projectId);
       }
       else if (pathParts.length === 2 && pathParts[0] && pathParts[1]) {
         projectId = pathParts[0];
-        console.log("Navbar - Task page detected, projectId:", projectId);
       }
 
       if (projectId) {
         setLoading(true);
-        console.log("Navbar - Fetching project with ID:", projectId);
 
         try {
           const response = await API.get(`/projects/${projectId}`);
-          console.log("Navbar Project API Response:", response.data);
-          console.log("Navbar - Success:", response.data.success);
-          console.log("Navbar - Project:", response.data.project);
+     
 
           if (response.data.success && response.data.project) {
             setProject(response.data.project);
-            console.log(
-              "Navbar - Project set successfully:",
-              response.data.project.name
-            );
+            
           } else {
-            console.log(
-              "Navbar - Failed to set project: success or project missing"
-            );
+            
             setProject(null);
           }
         } catch (err) {

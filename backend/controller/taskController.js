@@ -19,7 +19,7 @@ if (!project) {
   return res.status(404).json({ message: "Project not found" });
 }
 
-const teamId = project.teamId;
+const teamId = project.team;
 
 
     const userTeamRole = await TeamMember.findOne({
@@ -36,7 +36,7 @@ const teamId = project.teamId;
       return res.status(403).json({ message: "Only team leads or admins can create tasks" });
     }
 
-    if (assignedTo && !project.teamId.equals(teamId)) {
+    if (assignedTo && !project.team.equals(teamId)) {
       return res.status(400).json({ message: "Assigned user is not a member of this team" });
     }
     
