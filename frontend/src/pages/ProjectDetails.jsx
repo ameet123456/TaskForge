@@ -16,15 +16,13 @@ const ProjectDetails = () => {
   const fetchProjectDetails = async () => {
     try {
       const response = await API.get(`/projects/${id}`);
-      console.log("Project Details API Response:", response.data);
-
-      if (response.data.success && response.data.project) {
+      
+      if (response.data.success) {
         setProject(response.data.project);
         setTasks(response.data.project.tasks || []);
       }
     } catch (err) {
-      console.error("Error fetching project details:", err);
-      setError("Failed to load project details.");
+      setError("Failed to fetch project details");
     } finally {
       setLoading(false);
     }

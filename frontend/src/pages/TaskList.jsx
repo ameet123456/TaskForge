@@ -84,17 +84,13 @@ const TaskList = () => {
           API.get("/tasks"),
           API.get("/projects"),
         ]);
-        console.log("🔥 Task Response:", taskRes.data);
-        console.log("🔥 Project Response:", projectRes.data);
-        if (taskRes.data.success) {
+        
+        if (taskRes.data.success && projectRes.data.success) {
           setTasks(taskRes.data.data);
-        }
-
-        if (projectRes.data.success) {
           setProjects(projectRes.data.projects);
         }
-      } catch (err) {
-        setError("Error fetching tasks or projects.");
+      } catch (error) {
+        setError("Failed to fetch data");
       } finally {
         setLoading(false);
       }
@@ -116,7 +112,6 @@ const TaskList = () => {
     return due < now;
   };
 
-  // Filter tasks into active and deactivated
   const activeTasks = tasks.filter(task => !isTaskOverdue(task.dueDate));
   const deactivatedTasks = tasks.filter(task => isTaskOverdue(task.dueDate));
 

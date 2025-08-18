@@ -36,8 +36,10 @@ export const createTeam = async (req, res) => {
       team
     });
   } catch (error) {
-    console.error("Error creating team:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ 
+      success: false, 
+      message: "Failed to create team" 
+    });
   }
 };
 
@@ -61,8 +63,10 @@ export const getAllTeams = async (req, res) => {
 
     res.status(200).json({ success: true, data: enrichedTeams });
   } catch (error) {
-    console.error("Error fetching teams:", error);
-    res.status(500).json({ success: false, message: "Server error" });
+    res.status(500).json({ 
+      success: false, 
+      message: "Failed to fetch teams" 
+    });
   }
 };
 
@@ -84,8 +88,10 @@ export const getTeamById = async (req, res) => {
  
      res.status(200).json({ success: true, data: { team, projects } });
    } catch (error) {
-     console.error("Error fetching team:", error);
-     res.status(500).json({ message: "Server error" });
+     res.status(500).json({ 
+      success: false, 
+      message: "Failed to fetch team" 
+    });
    }
  };
  
@@ -119,8 +125,10 @@ export const addUserToTeam = async (req, res) => {
     res.status(200).json({ message: "User added to the team", team });
 
   } catch (error) {
-    console.error("Error adding member:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ 
+      success: false, 
+      message: "Failed to add member" 
+    });
   }
 };
 
@@ -139,8 +147,10 @@ export const deleteTeam = async (req, res) => {
 
     res.status(200).json({ message: "Team and all members deleted" });
   } catch (error) {
-    console.error("Error deleting team:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ 
+      success: false, 
+      message: "Failed to delete team" 
+    });
   }
 };
 
@@ -159,8 +169,10 @@ export const updateTeam = async (req, res) => {
 
     res.status(200).json({ message: "Team updated", team });
   } catch (error) {
-    console.error("Error updating team:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ 
+      success: false, 
+      message: "Failed to update team" 
+    });
   }
 };
 
@@ -180,8 +192,10 @@ export const removeUserFromTeam = async (req, res) => {
     await TeamMember.findOneAndDelete({teamId, userId});
     res.status(200).json({ message: "User removed from team", team });
   } catch (error) {
-    console.error("Error removing user from team:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ 
+      success: false, 
+      message: "Failed to remove user from team" 
+    });
   }
 };
 

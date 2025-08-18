@@ -39,11 +39,10 @@ export const createProject = async (req, res) => {
 
     return res.status(201).json({ success: true, project });
   } catch (err) {
-    console.error("Error creating project:", err.message);
-    
-    return res
-      .status(500)
-      .json({ success: false, message: "Server error while creating project" });
+    res.status(500).json({ 
+      success: false, 
+      message: "Failed to create project" 
+    });
   }
 };
 
@@ -67,10 +66,9 @@ export const getProject = async (req, res) => {
 
     return res.status(200).json({ success: true, projects });
   } catch (err) {
-    console.error("Error fetching projects:", err.message);
-    return res.status(500).json({
-      success: false,
-      message: "Server error while fetching projects",
+    res.status(500).json({ 
+      success: false, 
+      message: "Failed to fetch projects" 
     });
   }
 };
@@ -90,10 +88,10 @@ export const getProjectById = async (req, res) => {
 
     return res.status(200).json({ success: true, project: projectWithTasks });
   } catch (err) {
-    console.error("Error in getProjectById:", err.message);
-    return res
-      .status(500)
-      .json({ success: false, message: "Server error while fetching project" });
+    res.status(500).json({ 
+      success: false, 
+      message: "Failed to fetch project" 
+    });
   }
 };
 export const editProject = async (req, res) => {
@@ -141,7 +139,9 @@ export const editProject = async (req, res) => {
       .status(403)
       .json({ message: "You don't have permission to update this project" });
   } catch (error) {
-    console.error("Error updating project:", error.message);
-    return res.status(500).json({ message: error.message || "Server error" });
+    res.status(500).json({ 
+      success: false, 
+      message: "Failed to update project" 
+    });
   }
 };

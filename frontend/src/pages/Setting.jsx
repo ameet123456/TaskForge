@@ -70,7 +70,6 @@ const SettingsPage = () => {
       setUser(userData);
       
     } catch (err) {
-      console.error("Error fetching settings:", err);
       setError("Failed to load settings");
     } finally {
       setLoading(false);
@@ -103,7 +102,6 @@ const SettingsPage = () => {
       setSuccess("Settings saved successfully!");
       setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
-      console.error("Error saving settings:", err);
       setError("Failed to save settings");
       setTimeout(() => setError(""), 3000);
     } finally {
@@ -132,7 +130,6 @@ const SettingsPage = () => {
       setSuccess("Password changed successfully!");
       setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
-      console.error("Error changing password:", err);
       setError("Failed to change password");
       setTimeout(() => setError(""), 3000);
     } finally {

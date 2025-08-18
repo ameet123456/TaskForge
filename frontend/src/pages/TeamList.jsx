@@ -21,8 +21,7 @@ const TeamList = () => {
           setError("Failed to fetch teams.");
         }
       } catch (err) {
-        console.error("Error fetching teams:", err);
-        setError("Error fetching teams.");
+        setError("Failed to fetch teams");
       } finally {
         setLoading(false);
       }

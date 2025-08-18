@@ -24,7 +24,6 @@ const ProjectList = () => {
       const response = await API.get("/projects");
 
       if (response.data.success && Array.isArray(response.data.projects)) {
-        console.log("🔥 Projects from backend:", response.data.projects);
         setProjects(response.data.projects);
       } else {
         setError("Unexpected response format");

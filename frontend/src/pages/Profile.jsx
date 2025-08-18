@@ -62,7 +62,6 @@ const Profile = () => {
         });
       }
     } catch (err) {
-      console.error("Error fetching user profile:", err);
       setError("Failed to load profile");
     } finally {
       setLoading(false);
@@ -86,7 +85,7 @@ const Profile = () => {
         totalProjects: projects.length
       });
     } catch (err) {
-      console.error("Error fetching stats:", err);
+      setError("Failed to fetch stats");
     }
   };
 
@@ -115,7 +114,6 @@ const Profile = () => {
         setTimeout(() => setSuccess(""), 3000);
       }
     } catch (err) {
-      console.error("Error updating profile:", err);
       setError("Failed to update profile");
       setTimeout(() => setError(""), 3000);
     } finally {

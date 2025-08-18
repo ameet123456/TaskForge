@@ -8,9 +8,7 @@ const verifyRole = (...allowedRoles) => {
     }
 
     const role = user.role || "unknown";
-    console.log(" User isAdmin:", user.isAdmin);
-    console.log(" User role:", role);
-    console.log("Allowed roles:", allowedRoles);
+    
 
     if (user.isAdmin && allowedRoles.includes("admin")) {
       console.log(" Admin access granted");

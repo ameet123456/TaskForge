@@ -43,31 +43,35 @@ const TaskForm = () => {
 
   useEffect(() => {
     const initializeForm = async () => {
-      const userData = JSON.parse(localStorage.getItem("user"));
-      setUser(userData);
+      try {
+        const userData = JSON.parse(localStorage.getItem("user"));
+        setUser(userData);
 
-      const { projectId, projectName, teamId } = location.state || {};
+        const { projectId, projectName, teamId } = location.state || {};
 
-      if (userData?.isAdmin) {
-        await fetchTeams();
-        
-        if (projectId) {
-          setFormData(prev => ({ ...prev, projectId, teamId: teamId || "" }));
-          if (teamId) {
-            await fetchTeamMembers(teamId);
+        if (userData?.isAdmin) {
+          await fetchTeams();
+          
+          if (projectId) {
+            setFormData(prev => ({ ...prev, projectId, teamId: teamId || "" }));
+            if (teamId) {
+              await fetchTeamMembers(teamId);
+            }
+            if (projectName) {
+              setSelectedProjectInfo({ name: projectName });
+            } else {
+              await fetchProjectDetails(projectId);
+            }
           }
-          if (projectName) {
-            setSelectedProjectInfo({ name: projectName });
+        } else if (userData?.teams && userData.teams.length > 0) {
+          if (projectId) {
+            await handleProjectFromNavigation(userData, projectId, teamId);
           } else {
-            await fetchProjectDetails(projectId);
+            await autoSelectTeamAndProject(userData);
           }
         }
-      } else if (userData?.teams && userData.teams.length > 0) {
-        if (projectId) {
-          await handleProjectFromNavigation(userData, projectId, teamId);
-        } else {
-          await autoSelectTeamAndProject(userData);
-        }
+      } catch (error) {
+        setError("Failed to initialize form");
       }
     };
 
@@ -111,7 +115,7 @@ const TaskForm = () => {
           const teamResponse = await API.get(`/teams/${actualTeamId}`);
           teamInfo = teamResponse.data.team || teamResponse.data;
         } catch (error) {
-          console.error("Error fetching team details:", error);
+          // console.error("Error fetching team details:", error);
         }
       }
       
@@ -133,7 +137,7 @@ const TaskForm = () => {
       }
       
     } catch (error) {
-      console.error("Error handling project from navigation:", error);
+      // console.error("Error handling project from navigation:", error);
       setError("Failed to load project information.");
     }
   };
@@ -150,50 +154,37 @@ const TaskForm = () => {
       
       return project;
     } catch (error) {
-      console.error("Error fetching project details:", error);
+      // console.error("Error fetching project details:", error);
       setError("Failed to load project details.");
+      return null;
     }
   };
 
   const autoSelectTeamAndProject = async (userData) => {
     try {
-      // Debug: Check what's in localStorage and userData
-      console.log("🔍 DEBUG - localStorage teamId:", localStorage.getItem("teamId"));
-      console.log("🔍 DEBUG - userData.teamId:", userData.teamId);
-      console.log("🔍 DEBUG - userData.teams:", userData.teams);
-      console.log("🔍 DEBUG - first team ID:", userData.teams?.[0]?._id);
-      
-      const currentTeamId = localStorage.getItem("teamId") || userData.teamId || userData.teams?.[0]?.teamId;
-      console.log("🔍 DEBUG - Final currentTeamId:", currentTeamId);
+      let currentTeamId = localStorage.getItem("teamId") || userData.teamId || userData.teams?.[0]?.teamId;
       
       let activeTeam = null;
       
       // Try to find the team in userData.teams
       if (userData.teams && userData.teams.length > 0) {
-        console.log("🔍 DEBUG - Searching for team in userData.teams...");
         activeTeam = userData.teams.find(team => team.teamId === currentTeamId);
-        console.log("🔍 DEBUG - Found activeTeam in userData.teams:", activeTeam);
         
         // If not found by ID, try the first team
         if (!activeTeam) {
           activeTeam = userData.teams[0];
-          console.log("🔍 DEBUG - Using first team as fallback:", activeTeam);
         }
       }
       
       // If still no team found, fetch from API
       if (!activeTeam && currentTeamId) {
-        console.log("🔍 DEBUG - Fetching team from API with ID:", currentTeamId);
         try {
           const teamResponse = await API.get(`/teams/${currentTeamId}`);
           activeTeam = teamResponse.data.team || teamResponse.data;
-          console.log("🔍 DEBUG - Team fetched from API:", activeTeam);
         } catch (error) {
-          console.error("❌ Error fetching team from API:", error);
+          // console.error("❌ Error fetching team from API:", error);
         }
       }
-      
-      console.log("🔍 DEBUG - Final activeTeam:", activeTeam);
       
       // Transform the team object to match expected structure for display
       const teamInfoForDisplay = activeTeam ? {
@@ -202,45 +193,35 @@ const TaskForm = () => {
         role: activeTeam.role
       } : null;
       
-      console.log("🔍 DEBUG - teamInfoForDisplay:", teamInfoForDisplay);
       setSelectedTeamInfo(teamInfoForDisplay);
       
       const teamIdToUse = activeTeam?.teamId || currentTeamId;
-      console.log("🔍 DEBUG - teamIdToUse:", teamIdToUse);
       setFormData(prev => ({ ...prev, teamId: teamIdToUse }));
       
       if (teamIdToUse) {
-        console.log("🔍 DEBUG - Fetching team members and projects for team:", teamIdToUse);
         await fetchTeamMembers(teamIdToUse);
         await autoSelectProject(teamIdToUse);
-      } else {
-        console.log("❌ DEBUG - No teamIdToUse found, skipping team members and projects fetch");
       }
       
     } catch (error) {
-      console.error("❌ Error in auto-selecting team and project:", error);
+      // console.error("❌ Error in auto-selecting team and project:", error);
       setError("Failed to load team and project information.");
     }
   };
 
   const autoSelectProject = async (teamId) => {
     try {
-      console.log("🔍 DEBUG - autoSelectProject called with teamId:", teamId);
       const response = await API.get("/projects");
-      console.log("🔍 DEBUG - All projects from API:", response.data.projects);
+      const allProjects = response.data.projects;
       
-      const teamProjects = response.data.projects.filter(
+      const teamProjects = allProjects.filter(
         (project) => {
-          console.log("🔍 DEBUG - Checking project:", project.name, "project.team:", project.team, "teamId:", teamId);
           return project.team?.toString() === teamId.toString();
         }
       );
       
-      console.log("🔍 DEBUG - Filtered teamProjects:", teamProjects);
-      
       if (teamProjects.length > 0) {
         const selectedProject = teamProjects[0];
-        console.log("🔍 DEBUG - Selected first project:", selectedProject);
         
         setSelectedProjectInfo({
           name: selectedProject.name,
@@ -254,11 +235,11 @@ const TaskForm = () => {
         
         setProjects(teamProjects);
       } else {
-        console.log("❌ DEBUG - No projects found for teamId:", teamId);
+        // console.log("❌ DEBUG - No projects found for teamId:", teamId);
         setError("No projects available for your team. Please contact your admin.");
       }
     } catch (error) {
-      console.error("❌ Error auto-selecting project:", error);
+      // console.error("❌ Error auto-selecting project:", error);
       setError("Failed to load project information.");
     }
   };
@@ -268,7 +249,7 @@ const TaskForm = () => {
       const response = await API.get("/teams");
       setTeams(response.data.data);
     } catch (err) {
-      console.error("Error fetching teams:", err);
+      // console.error("Error fetching teams:", err);
       setError("Failed to load teams.");
     }
   };
@@ -282,7 +263,7 @@ const TaskForm = () => {
         setTeamMembers(response.data.members);
       }
     } catch (err) {
-      console.error("Error fetching team members:", err);
+      // console.error("Error fetching team members:", err);
       setError("Failed to load team members.");
     }
   };
@@ -297,7 +278,7 @@ const TaskForm = () => {
       
       setProjects(filteredProjects);
     } catch (err) {
-      console.error("Error fetching projects:", err);
+      // console.error("Error fetching projects:", err);
       setError("Failed to load projects.");
     }
   };
@@ -317,7 +298,7 @@ const TaskForm = () => {
         const teamId = res.data.project.team || res.data.project.teamId;
         fetchTeamMembers(teamId);
       } catch (err) {
-        console.error("Failed to fetch team from project:", err);
+        // console.error("Failed to fetch team from project:", err);
         setError("Failed to load project details.");
       }
     }
@@ -375,7 +356,7 @@ const TaskForm = () => {
         setError("Task creation failed.");
       }
     } catch (err) {
-      console.error("Error creating task:", err);
+      // console.error("Error creating task:", err);
       setError("Task creation error.");
     } finally {
       setLoading(false);

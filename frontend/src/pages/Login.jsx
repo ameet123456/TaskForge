@@ -10,7 +10,7 @@ const DemoUserModal = ({ isOpen, onClose, onSelectUser }) => {
 
   const demoUsers = {
     team_lead: {
-      email: "lead1@example.com",
+      email: "puja@tf.com",
       password: "123456",
       role: "Team Lead",
       description: "Manage projects, assign tasks, and oversee team performance",
@@ -18,7 +18,7 @@ const DemoUserModal = ({ isOpen, onClose, onSelectUser }) => {
       color: "from-[#FF1E00] to-[#FF6B35]"
     },
     team_member: {
-      email: "member1@example.com", 
+      email: "ashish@tf.com", 
       password: "123456",
       role: "Team Member", 
       description: "View assigned tasks, update progress, and collaborate with team",
@@ -155,11 +155,8 @@ const Login = () => {
         password,
       });
 
-      console.log("Backend Response:", response.data);
-
       if (response.data.success && response.data.data) {
         const { token, user } = response.data.data;
-        console.log("Received User From Backend:", user);
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(user));
 
@@ -215,8 +212,6 @@ const Login = () => {
         password: demoPassword,
       });
 
-      console.log("Demo Login Response:", response.data);
-
       if (response.data.success && response.data.data) {
         const { token, user } = response.data.data;
         localStorage.setItem("token", token);
@@ -240,7 +235,6 @@ const Login = () => {
         }
       }
     } catch (error) {
-      console.error("Demo login failed:", error);
       setError("Demo login failed. Please try again.");
     } finally {
       setDemoLoginInProgress(false);
@@ -257,10 +251,8 @@ const Login = () => {
         const parsedUser = JSON.parse(decodeURIComponent(user));
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(parsedUser));
-        console.log("Stored User (Google Login):", parsedUser);
         navigate("/welcome");
       } catch (error) {
-        console.error("Error parsing user data:", error);
         setError("Error processing login. Please try again.");
       }
     }
@@ -271,7 +263,6 @@ const Login = () => {
     const demoMode = params.get("demo");
 
     if (demoMode === "true") {
-      console.log("DEMO MODE ACTIVATED - Showing user selection modal");
       setShowDemoModal(true);
     }
   }, [location.search]);

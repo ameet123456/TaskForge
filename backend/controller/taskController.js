@@ -71,8 +71,10 @@ const teamId = project.team;
       data: taskWithDetails,
     });
   } catch (error) {
-    console.error("Error creating task:", error);
-    return res.status(500).json({ message: "Server error" });
+    res.status(500).json({ 
+      success: false, 
+      message: "Failed to create task" 
+    });
   }
 };
 
@@ -156,8 +158,10 @@ export const updateTask = async (req, res) => {
       data: updatedTask,
     });
   } catch (error) {
-    console.error("Error updating task:", error);
-    return res.status(500).json({ message: "Server error" });
+    res.status(500).json({ 
+      success: false, 
+      message: "Failed to update task" 
+    });
   }
 };
 
@@ -183,8 +187,10 @@ export const deleteTask = async (req, res) => {
     await task.save();
     return res.status(200).json({ message: "Task deleted successfully" });
   } catch (error) {
-    console.error("Error deleting task:", error);
-    return res.status(500).json({ message: "Server error" });
+    res.status(500).json({ 
+      success: false, 
+      message: "Failed to delete task" 
+    });
   }
 };
 
@@ -198,8 +204,10 @@ export const getTask = async (req, res) => {
     }
     return res.status(200).json({ success: true, data: task });
   } catch (error) {
-    console.error("Error getting task:", error);
-    return res.status(500).json({ message: "Server error" });
+    res.status(500).json({ 
+      success: false, 
+      message: "Failed to fetch task" 
+    });
   }
 };
 
@@ -208,7 +216,9 @@ export const getAllTasks = async (req, res) => {
     const tasks = await Task.find().populate('assignedTo', 'name email');
     return res.status(200).json({ success: true, data: tasks });
   } catch (error) {
-    console.error("Error fetching tasks:", error);
-    return res.status(500).json({ message: "Server error" });
+    res.status(500).json({ 
+      success: false, 
+      message: "Failed to fetch tasks" 
+    });
   }
 };

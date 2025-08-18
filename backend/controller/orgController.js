@@ -31,11 +31,9 @@ export const createOrganization = async (req, res) => {
       organization,
     });
   } catch (error) {
-    console.error("Error creating organization:", error);
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
-      message: "Internal server error",
-      error: error.message,
+      message: "Failed to create organization"
     });
   }
 };
@@ -68,11 +66,9 @@ export const getAllOrganizations = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Error fetching organizations:", error);
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
-      message: "Internal server error",
-      error: error.message,
+      message: "Failed to fetch organizations"
     });
   }
 };
@@ -95,11 +91,9 @@ export const getOrganizationById = async (req, res) => {
 
     return res.status(200).json({ success: true, data: organization });
   } catch (error) {
-    console.error("Error fetching organization:", error);
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
-      message: "Internal server error",
-      error: error.message,
+      message: "Failed to fetch organization"
     });
   }
 };
@@ -145,11 +139,9 @@ export const updateOrganization = async (req, res) => {
       data: updated,
     });
   } catch (error) {
-    console.error("Error updating organization:", error);
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
-      message: "Internal server error",
-      error: error.message,
+      message: "Failed to update organization"
     });
   }
 };
@@ -183,11 +175,9 @@ export const deleteOrganization = async (req, res) => {
       data: deactivated,
     });
   } catch (error) {
-    console.error("Error deleting organization:", error);
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
-      message: "Internal server error",
-      error: error.message,
+      message: "Failed to delete organization"
     });
   }
 };

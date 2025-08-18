@@ -9,6 +9,7 @@ const HomePage = () => {
   const [role, setRole] = useState("");
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [currentTime, setCurrentTime] = useState(new Date());
   
   const user = JSON.parse(localStorage.getItem("user"));
@@ -84,9 +85,10 @@ const HomePage = () => {
         overdueTasks,
         totalTasks: tasks.length
       });
-    } catch (err) {
-      console.error("Error fetching stats:", err);
-    } finally {
+      setError(null);
+          } catch (err) {
+        setError("Failed to fetch stats");
+      } finally {
       setLoading(false);
     }
   };
@@ -183,6 +185,21 @@ const HomePage = () => {
           <div className="text-center py-16">
             <div className="w-12 h-12 border-4 border-[#FF1E00] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
             <p className="text-gray-400">Loading your workspace...</p>
+          </div>
+        ) : error ? (
+          <div className="text-center py-16">
+            <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <p className="text-red-400 text-lg mb-4">{error}</p>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="bg-[#FF1E00] hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors"
+            >
+              Try Again
+            </button>
           </div>
         ) : stats ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">

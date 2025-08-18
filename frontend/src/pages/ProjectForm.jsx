@@ -35,10 +35,8 @@ const ProjectForm = () => {
   const fetchTeams = async () => {
     try {
       const response = await API.get("/teams");
-      console.log("Fetched Teams:", response.data);
       setTeams(response.data.data || []); 
     } catch (err) {
-      console.error("Error fetching teams:", err);
       setError("Failed to load teams.");
     }
   };
@@ -65,7 +63,6 @@ const ProjectForm = () => {
         setError("Project creation failed.");
       }
     } catch (err) {
-      console.error("Error creating project:", err);
       setError("Server error while creating project.");
     } finally {
       setLoading(false);

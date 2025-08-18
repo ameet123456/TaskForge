@@ -37,7 +37,6 @@ export const updateTeamMemberRole = async (req, res) => {
       teamMember,
     });
   } catch (error) {
-    console.error("Error updating user role in team:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -54,8 +53,6 @@ export const getAllTeamMembers = async (req, res) => {
       });
     }
 
-    console.log("Fetching team members for teamId:", teamId);
-    
     const members = await TeamMember.find({ team: teamId }).populate('user', 'name email');
 
     if (!members || members.length === 0) {
@@ -72,10 +69,8 @@ export const getAllTeamMembers = async (req, res) => {
       role: m.role,
     }));
 
-    console.log("Found team members:", formattedMembers);
     res.status(200).json({ success: true, members: formattedMembers });
   } catch (error) {
-    console.error('Error fetching team members:', error);
     res.status(500).json({ 
       success: false, 
       message: 'Server error',
@@ -96,7 +91,6 @@ export const getSingleTeamMember = async (req, res) => {
 
     res.status(200).json({ success: true, member });
   } catch (error) {
-    console.error("Error fetching single team member:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -114,10 +108,8 @@ export const getMyTeams = async (req, res) => {
       role: m.role
     }));
 
-    console.log("User teams:", formattedTeams);
     res.status(200).json(formattedTeams);
   } catch (error) {
-    console.error("Error fetching user's teams:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -142,7 +134,6 @@ export const removeUserFromTeam = async (req, res) => {
 
     res.status(200).json({ message: "User soft-removed from team" });
   } catch (error) {
-    console.error("Error removing user from team:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -152,10 +143,6 @@ export const addUserToTeam = async (req, res) => {
     const { teamId } = req.params;
     const { userId } = req.body;
 
-    console.log("addUserToTeam called");
-    console.log("teamId:", teamId);
-    console.log("userId:", userId);
-
     if (!teamId || !userId) {
       return res.status(400).json({ message: "Missing teamId or userId" });
     }
@@ -164,8 +151,6 @@ export const addUserToTeam = async (req, res) => {
     if (!team) {
       return res.status(404).json({ message: "Team not found" });
     }
-
-    console.log("Team found:", team.name);
 
     const existing = await TeamMember.findOne({ team: teamId, user: userId });
     if (existing && existing.isActive) {
@@ -190,10 +175,8 @@ export const addUserToTeam = async (req, res) => {
       await team.save();
     }
 
-    console.log("🎉 Member added to team:", newMember);
     res.status(201).json({ message: "User added to team", member: newMember });
   } catch (error) {
-    console.error("Error in addUserToTeam:", error);
     res.status(500).json({ message: "Server error" });
   }
 };

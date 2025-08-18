@@ -23,7 +23,7 @@ const CreateTeamForm = () => {
           setUsers(response.data.users);
         }
       } catch (err) {
-        console.error("Error fetching users:", err);
+        setError("Failed to fetch users");
       }
     };
     fetchUsers();
@@ -64,8 +64,7 @@ const CreateTeamForm = () => {
         setError("Team creation failed.");
       }
     } catch (err) {
-      console.error("Error creating team:", err);
-      setError(err.response?.data?.message || "Server error.");
+      setError("Failed to create team");
     } finally {
       setLoading(false);
     }

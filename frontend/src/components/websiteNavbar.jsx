@@ -27,7 +27,6 @@ const WebsiteNavbar = () => {
         const parsedUser = JSON.parse(userData);
         setUser(parsedUser);
       } catch (error) {
-        console.error("Error parsing user data:", error);
       }
     }
   }, []);
@@ -71,7 +70,6 @@ const WebsiteNavbar = () => {
           setLoading(false);
         }
       } else {
-        console.log("Navbar - No projectId found, clearing project");
         setProject(null);
       }
     };
@@ -96,12 +94,9 @@ const WebsiteNavbar = () => {
 
   const primaryTeam = user?.teams?.[0];
   
-  // Check if user is ONLY a regular team member (not admin, not team leader)
   const isOnlyTeamMember = !user?.isAdmin && primaryTeam?.role && primaryTeam.role !== 'team_lead';
   
-  // Determine what to show in navigation based on user role
   const getProjectsNavigation = () => {
-    // Only regular team members see "Tasks", everyone else sees "Projects"
     if (isOnlyTeamMember) {
       return {
         label: "Tasks",
