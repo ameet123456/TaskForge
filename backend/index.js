@@ -32,7 +32,7 @@ dotenv.config();
 if (process.env.JWT_SECRET.length < 32 || process.env.SESSION_SECRET.length < 32) process.exit(1);
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 10000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
 // Connect to MongoDB
