@@ -17,11 +17,11 @@ import projectRoutes from "./routes/project_route.js";
 import "./config/passportConfig.js";
 import { rateLimiter, authRateLimiter, securityHeaders, compressionMiddleware, validateInput, requestSizeLimit } from "./middleware/security.js";
 
-// Load env vars
+// Load environment variables
 dotenv.config();
 
 // Validate essential env vars
-['JWT_SECRET','SESSION_SECRET','MONGODB_URI'].forEach(varName => {
+['JWT_SECRET', 'SESSION_SECRET', 'MONGODB_URI'].forEach(varName => {
     if (!process.env[varName]) {
         logger.error(`${varName} is missing in .env`);
         process.exit(1);
@@ -29,31 +29,35 @@ dotenv.config();
 });
 
 // Ensure secrets are strong
-if (process.env.JWT_SECRET.length < 32 || process.env.SESSION_SECRET.length < 32) process.exit(1);
+if (process.env.JWT_SECRET.length < 32 || process.env.SESSION_SECRET.length < 32) {
+    logger.error('JWT_SECRET and SESSION_SECRET must be at least 32 characters');
+    process.exit(1);
+}
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT; // ✅ Render sets this dynamically
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
 // Connect to MongoDB
 await connectDB();
+logger.info('✅ Database connected successfully');
 
 // Security middleware
 app.use(securityHeaders);
 app.use(compressionMiddleware);
 app.use(requestSizeLimit);
 
-// CORS
-const allowedOrigins = process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim());
+// CORS configuration
+const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim()) : ["http://localhost:3000"];
 app.use(cors({
-    origin: (origin, callback) => !origin || allowedOrigins.includes(origin) ? callback(null,true) : callback(new Error('Not allowed by CORS')),
+    origin: (origin, callback) => !origin || allowedOrigins.includes(origin) ? callback(null, true) : callback(new Error('Not allowed by CORS')),
     methods: ["GET","POST","PUT","DELETE","PATCH","OPTIONS"],
     credentials: true
 }));
 
 // Body parsing
-app.use(express.json({ limit:'10mb' }));
-app.use(express.urlencoded({ extended:true, limit:'10mb', parameterLimit:1000 }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb', parameterLimit: 1000 }));
 
 // Session
 app.use(session({
@@ -61,8 +65,8 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI, ttl: 24*60*60 }),
-    cookie: { secure: NODE_ENV==='production', httpOnly:true, maxAge: parseInt(process.env.SESSION_MAX_AGE), sameSite: NODE_ENV==='production'?'strict':'lax' },
-    name: process.env.SESSION_NAME,
+    cookie: { secure: NODE_ENV === 'production', httpOnly: true, maxAge: parseInt(process.env.SESSION_MAX_AGE) || 24*60*60*1000, sameSite: NODE_ENV==='production' ? 'strict' : 'lax' },
+    name: process.env.SESSION_NAME || 'taskforge_session',
     rolling: true
 }));
 
@@ -77,15 +81,16 @@ app.use('/api', rateLimiter);
 // Input validation
 app.use('/api', validateInput);
 
-// Health & ready checks
-app.get('/health', (req,res)=> res.status(200).json({success:true,message:'TaskForge API is running'}));
-app.get('/ready', async (req,res)=>{
+// Health & readiness endpoints
+app.get('/health', (req, res) => res.status(200).json({ success: true, message: 'TaskForge API is running' }));
+
+app.get('/ready', async (req, res) => {
     try {
-        if(mongoose.connection.readyState!==1) throw new Error('DB not ready');
+        if (mongoose.connection.readyState !== 1) throw new Error('DB not ready');
         await mongoose.connection.db.admin().ping();
-        res.status(200).json({success:true,message:'Service ready'});
-    } catch(e){
-        res.status(503).json({success:false,message:'Service not ready',error:e.message});
+        res.status(200).json({ success: true, message: 'Service ready' });
+    } catch (e) {
+        res.status(503).json({ success: false, message: 'Service not ready', error: e.message });
     }
 });
 
@@ -97,24 +102,27 @@ app.use("/api/team-members", teamMemberRoutes);
 app.use("/api/projects", projectRoutes);
 
 // 404 handler
-app.use('*',(req,res)=>res.status(404).json({success:false,message:'Route not found',path:req.originalUrl}));
+app.use('*', (req, res) => res.status(404).json({ success: false, message: 'Route not found', path: req.originalUrl }));
 
 // Global error handler
-app.use((err, req, res, next)=>{
+app.use((err, req, res, next) => {
     logger.error('Unhandled error', err);
-    res.status(err.status||500).json({success:false,message:err.message||'Internal server error'});
+    res.status(err.status || 500).json({ success: false, message: err.message || 'Internal server error' });
 });
 
 // Start server
-const server = app.listen(PORT,'0.0.0.0',()=> logger.info(`🚀 Server running on port ${PORT} in ${NODE_ENV}`));
+const server = app.listen(PORT, '0.0.0.0', () => {
+    logger.info(`🚀 Server running on port ${PORT} in ${NODE_ENV} mode`);
+});
 
 // Graceful shutdown
-const gracefulShutdown = async(signal)=>{
+const gracefulShutdown = async (signal) => {
+    logger.info(`${signal} received, shutting down gracefully...`);
     server.close();
-    if(mongoose.connection.readyState===1) await mongoose.connection.close();
+    if (mongoose.connection.readyState === 1) await mongoose.connection.close();
     process.exit(0);
 };
-process.on('SIGTERM', ()=>gracefulShutdown('SIGTERM'));
-process.on('SIGINT', ()=>gracefulShutdown('SIGINT'));
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
 export default app;
