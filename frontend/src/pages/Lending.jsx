@@ -57,9 +57,9 @@ const Landing = () => {
     { text: "Create and integrate CRUD APIs for teams, projects, and tasks with assignment and tracking features", completed: true },
     { text: "Design and implement responsive frontend UI using React and TailwindCSS, integrated with backend APIs", completed: true },
     { text: "Develop core dashboard with project/task overviews and basic team management", completed: true },
+    { text: "Optimize performance, enhance security, and deploy production build to cloud hosting", completed: true },
+    { text: "Officially launch the application for public use", completed: false },
     { text: "Implement advanced collaboration features (email invitations, file sharing, in-app notifications)", completed: false },
-    { text: "Optimize performance, enhance security, and deploy production build to cloud hosting", completed: false },
-    { text: "Officially launch the application for public use", completed: false }
   ];
   
   
