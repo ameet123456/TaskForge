@@ -118,6 +118,7 @@ const ProjectList = () => {
                   {activeProjects.map((project) => (
                     <div
                       key={project._id}
+                      onClick={() => navigate(`/projects/${project._id}`)}
                       className="bg-[#2d2d2d] rounded-xl p-6 text-white min-h-[255px] flex flex-col justify-between hover:bg-[#FF1E00] transition-colors duration-200"
                     >
                       <div>
@@ -149,7 +150,6 @@ const ProjectList = () => {
                         </span>
 
                         <button
-                          onClick={() => navigate(`/projects/${project._id}`)}
                           className="w-8 h-8 rounded-full bg-white hover:bg-gray-200 flex items-center justify-center transition"
                         >
                           <svg
